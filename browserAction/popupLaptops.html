@@ -1,0 +1,75 @@
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="popup.css" />
+  </head>
+  <body>
+    <table id="laptopButton">
+      <tr>
+        <td>
+          <label class="switch" id="laptopFormOnSwitch">
+            <input type="checkbox" id="laptopFormOn">
+            <span class="slider"></span>
+          </label>
+        </td>
+        <td style="padding-bottom:7px;"><label for="laptopFormOn" style="font-weight:bold;">Laptop Checkout Form</label></td>
+      </tr>
+    </table>
+    <div id="defaultMenu" class="mainWrapper">
+      <h1>Tools</h1>
+      <div id="problemItem">SCLS Problem Item Form</div>
+      <div id="lostCard">Add Lost Library Card Note</div>
+      <div id="PSTAT2">Set PSTAT from Alternate Address</div>
+      <div id="paymentPlan">Add MPL Payment Plan Note</div>
+      <h1>Shortcuts</h1>
+      <div><a id="shortcut1" href="" target="_blank"></a></div>
+      <div><a id="shortcut2" href="" target="_blank"></a></div>
+      <div><a id="shortcut3" href="" target="_blank"></a></div>
+      <div><a id="shortcut4" href="" target="_blank"></a></div>
+      <div><a id="shortcut5" href="" target="_blank"></a></div>
+      <div><a id="shortcut6" href="" target="_blank"></a></div>
+    </div>
+
+ <div id="laptopMenu" class="mainWrapper">
+      <form action="action_page.php" method="GET">
+        <h1>Laptop Checkout</h1>
+        <table>
+          <label for="Barcode">Patron Barcode: </label>
+          <input type="text" id="anyNumber" name="barcode" maxlength="14" placeholder="29078012345678" required> <br>
+
+          <label for="LaptopId">Laptop/iPad ID: </label>
+          <input type="text" id="laptopId" name="laptopId" list="l1" placeholder="PC1-A1" maxlength="6" required>
+                  <datalist id="l1">
+                    <option>PC1-A1</option>
+                    <option>PC1-A2</option>
+                    <option>PC1-A3</option>
+                    <option>PC1-A4</option>
+                    <option>PC1-A5</option>
+                    <option>PC1-B1</option>
+                    <option>PC1-B2</option>
+                    <option>PC1-B3</option>
+                    <option>PC2-A1</option>
+                    <option>PC2-A2</option>
+                    <option>PC2-A3</option>
+                    <option>PC2-A4</option>
+                    <option>PC2-A5</option>
+                    <option>PC2-B1</option>
+                    <option>PC2-B2</option>
+                  </datalist>
+                 <br>
+          <label for="Accessories">Num of Accessories: </label>
+          <input type="number" id="accessories" name="accessories" min="0" max="4" placeholder="1-4" required>
+        </table>
+            <br>
+          <input type="submit" value="Submit" onClick=alert()>
+       </form>
+    </div>
+
+    <div id="prefWrapper"><a id="prefs">Extension Preferences</a></div>
+
+    <script type="text/javascript" src="popup.js"></script>
+    <script type="text/javascript" src="popupLaptops.js"></script>
+  </body>
+</html>
