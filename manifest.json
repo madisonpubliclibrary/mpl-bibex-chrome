@@ -33,7 +33,8 @@
 
   "background": {
       "scripts": [
-        "/background/defaultPrefs.js"
+        "/background/defaultPrefs.js",
+        "/background/main.js"
       ],
       "persistent": false
   },

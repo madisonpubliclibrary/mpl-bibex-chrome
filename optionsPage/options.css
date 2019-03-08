@@ -5,7 +5,7 @@
   cursor: pointer;
 }
 
-label {
+label, select {
   cursor: pointer;
 }
 

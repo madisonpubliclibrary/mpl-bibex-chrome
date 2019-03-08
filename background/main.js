@@ -49,7 +49,6 @@ function setIcon() {
     }
   });
 };
-setIcon();
 
 chrome.runtime.onMessage.addListener(function(message, sender, reply) {
   switch (message.key) {
@@ -57,19 +56,19 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
       setIcon();
       break;
     case "addLostCardNote":
-      chrome.tabs.executeScript({
+      /*chrome.tabs.executeScript({
         "file": "/browserAction/scripts/addLostCardNote.js",
         "allFrames": true
-      });
+      });*/
       break;
     case "addPaymentPlanNote":
-      chrome.tabs.executeScript({
+      /*chrome.tabs.executeScript({
         "file": "/browserAction/scripts/addPaymentPlanNote.js",
         "allFrames": true
-      });
+      });*/
       break;
     case "alternatePSTAT":
-      chrome.tabs.query({
+      /*chrome.tabs.query({
         "currentWindow": true,
         "active": true
       }).then(tabs => {
@@ -78,7 +77,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
             "key": "findAlternatePSTAT"
           });
         }
-      });
+      });*/
       break;
   }
 });
