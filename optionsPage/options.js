@@ -1,34 +1,34 @@
-var skin = document.getElementById("skin"),
-  parseAddr = document.getElementById("parseAddr"),
-  restrictPatronFields = document.getElementById("restrictPatronFields"),
-  addPatronNotes = document.getElementById("addPatronNotes"),
-  updateAccountType = document.getElementById("updateAccountType"),
-  avAndOther = document.getElementById("avAndOther"),
-  cassette = document.getElementById("cassette"),
-  cd = document.getElementById("cd"),
-  dap = document.getElementById("dap"),
-  dvd = document.getElementById("dvd"),
-  equipment = document.getElementById("equipment"),
-  ill = document.getElementById("ill"),
-  software = document.getElementById("software"),
-  video = document.getElementById("video"),
-  sepAllAV = document.getElementById("sepAllAV"),
-  receiptFont = document.getElementById("receiptFont"),
-  sundayDropbox = document.getElementById("sundayDropbox"),
-  sundayDropboxPaused = document.getElementById("sundayDropboxPaused"),
-  shortcutText1 = document.getElementById("shortcutText1"),
-  shortcutLink1 = document.getElementById("shortcutLink1"),
-  shortcutText2 = document.getElementById("shortcutText2"),
-  shortcutLink2 = document.getElementById("shortcutLink2"),
-  shortcutText3 = document.getElementById("shortcutText3"),
-  shortcutLink3 = document.getElementById("shortcutLink3"),
-  shortcutText4 = document.getElementById("shortcutText4"),
-  shortcutLink4 = document.getElementById("shortcutLink4"),
-  shortcutText5 = document.getElementById("shortcutText5"),
-  shortcutLink5 = document.getElementById("shortcutLink5"),
-  shortcutText6 = document.getElementById("shortcutText6"),
-  shortcutLink6 = document.getElementById("shortcutLink6"),
-  avCodes = ["avAndOther", "cassette", "cd", "dap", "dvd", "equipment", "software", "video"];
+const skin = document.getElementById("skin");
+const parseAddr = document.getElementById("parseAddr");
+const restrictPatronFields = document.getElementById("restrictPatronFields");
+const addPatronNotes = document.getElementById("addPatronNotes");
+const updateAccountType = document.getElementById("updateAccountType");
+const avAndOther = document.getElementById("avAndOther");
+const cassette = document.getElementById("cassette");
+const cd = document.getElementById("cd");
+const dap = document.getElementById("dap");
+const dvd = document.getElementById("dvd");
+const equipment = document.getElementById("equipment");
+const ill = document.getElementById("ill");
+const software = document.getElementById("software");
+const video = document.getElementById("video");
+const sepAllAV = document.getElementById("sepAllAV");
+const receiptFont = document.getElementById("receiptFont");
+const sundayDropbox = document.getElementById("sundayDropbox");
+const sundayDropboxPaused = document.getElementById("sundayDropboxPaused");
+const shortcutText1 = document.getElementById("shortcutText1");
+const shortcutLink1 = document.getElementById("shortcutLink1");
+const shortcutText2 = document.getElementById("shortcutText2");
+const shortcutLink2 = document.getElementById("shortcutLink2");
+const shortcutText3 = document.getElementById("shortcutText3");
+const shortcutLink3 = document.getElementById("shortcutLink3");
+const shortcutText4 = document.getElementById("shortcutText4");
+const shortcutLink4 = document.getElementById("shortcutLink4");
+const shortcutText5 = document.getElementById("shortcutText5");
+const shortcutLink5 = document.getElementById("shortcutLink5");
+const shortcutText6 = document.getElementById("shortcutText6");
+const shortcutLink6 = document.getElementById("shortcutLink6");
+const avCodes = ["avAndOther", "cassette", "cd", "dap", "dvd", "equipment", "software", "video"];
 
 function restoreOptions() {
   chrome.storage.sync.get(null, function(res) {
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Check whether the class-level switches should be triggered
 function checkAllAV() {
-  var numChecked = 0;
+  let numChecked = 0;
 
   for (let id of avCodes) {
     if (document.getElementById(id).checked) numChecked++;

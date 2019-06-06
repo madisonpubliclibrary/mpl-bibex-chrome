@@ -1,14 +1,14 @@
-﻿var paymentPlan = document.getElementById('paymentPlan'),
-  lostcard = document.getElementById('lostCard'),
-  altPSTAT = document.getElementById('PSTAT2'),
-  problemItem = document.getElementById('problemItem'),
-  shortcut1 = document.getElementById('shortcut1'),
-  shortcut2 = document.getElementById('shortcut2'),
-  shortcut3 = document.getElementById('shortcut3'),
-  shortcut4 = document.getElementById('shortcut4'),
-  shortcut5 = document.getElementById('shortcut5'),
-  shortcut6 = document.getElementById('shortcut6'),
-  prefs = document.getElementById('prefs');
+const paymentPlan = document.getElementById('paymentPlan');
+const lostcard = document.getElementById('lostCard');
+const altPSTAT = document.getElementById('PSTAT2');
+const problemItem = document.getElementById('problemItem');
+const shortcut1 = document.getElementById('shortcut1');
+const shortcut2 = document.getElementById('shortcut2');
+const shortcut3 = document.getElementById('shortcut3');
+const shortcut4 = document.getElementById('shortcut4');
+const shortcut5 = document.getElementById('shortcut5');
+const shortcut6 = document.getElementById('shortcut6');
+const prefs = document.getElementById('prefs');
 
 paymentPlan.addEventListener('click', function() {
   chrome.runtime.sendMessage({"key": "addPaymentPlanNote"});

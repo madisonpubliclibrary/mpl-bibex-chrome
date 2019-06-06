@@ -86,7 +86,7 @@ a:focus {
 }
 
 input {
-  display: block; 
+  display: block;
 }
 
 input:checked + .slider {
