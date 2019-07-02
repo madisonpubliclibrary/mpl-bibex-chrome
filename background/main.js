@@ -172,6 +172,22 @@ var SCLSLibs = function() {
   };
 };
 
+// Load preference-selected function files
+chrome.webNavigation.onCompleted.addListener(details => {
+  if (details.parentFrameId === 0) {
+    // Optional scripts
+    chrome.storage.sync.get(null, res => {
+
+    });
+  }
+
+  chrome.tabs.executeScript(details.tabId, {
+    "file": "/content/scripts/betterLogo.js",
+    "allFrames": true
+  });
+
+});
+
 chrome.runtime.onMessage.addListener(function(message, sender, reply) {
   switch (message.key) {
     case "updateExtensionIcon":

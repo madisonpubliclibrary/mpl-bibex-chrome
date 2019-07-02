@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "MPL Bibliovation Extension",
   "short_name": "MPL BibEx",
-  "version": "0.2",
+  "version": "0.3",
   "author": "Lucas Schneider",
   "description": "PTFS Bibliovation modifications to benefit Wisconsin's South Central Library System",
   "homepage_url": "http://lrschneider.com/mpl-bibex-chrome",
@@ -53,5 +53,9 @@
     "*://*.census.gov/*",
     "*://*.googleapis.com/*",
     "*://mpl-bibex.lrschneider.com/*"
+  ],
+
+  "web_accessible_resources": [
+    "content/img/BibliovationLogo.png"
   ]
 }
