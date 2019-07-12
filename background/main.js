@@ -179,7 +179,44 @@ chrome.webNavigation.onCompleted.addListener(details => {
     chrome.storage.sync.get(null, res => {
 
     });
+
+    // Inherent scripts
+    chrome.tabs.executeScript(details.tabId, {
+      "file": "/content/scripts/sortItemCheckoutHistory.js",
+      "allFrames": true
+    });
   }
+
+  // Inherent scripts
+  chrome.tabs.executeScript(details.tabId, {
+    "file": "/content/scripts/fastaddWarning.js",
+    "allFrames": true
+  });
+
+  chrome.tabs.executeScript(details.tabId, {
+    "file": "/content/scripts/formatPatronRecord.js",
+    "allFrames": true
+  });
+
+  chrome.tabs.executeScript(details.tabId, {
+    "file": "/content/scripts/patronQuickSave.js",
+    "allFrames": true
+  });
+
+  chrome.tabs.executeScript(details.tabId, {
+    "file": "/content/scripts/printPatronBarcode.js",
+    "allFrames": true
+  });
+
+  /*chrome.tabs.executeScript(details.tabId, {
+    "file": "/content/scripts/selectPSTAT.js",
+    "allFrames": true
+  });*/
+
+  chrome.tabs.executeScript(details.tabId, {
+    "file": "/content/scripts/separateHSA.js",
+    "allFrames": true
+  });
 
   chrome.tabs.executeScript(details.tabId, {
     "file": "/content/scripts/betterLogo.js",
@@ -216,6 +253,20 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
           });
         }
       });*/
+      break;
+    case "printBarcode":
+      chrome.storage.sync.get('receiptFont', res => {
+        let receiptFont = res.hasOwnProperty('receiptFont') ? res.receiptFont : "36px";
+
+        chrome.tabs.create({
+          "url": "/printBarcode/printBarcode.html?barcode=" + message.barcode + "&fontSize=" + receiptFont,
+          "active": false
+        }).then(tab => {
+          setTimeout(() => {
+            chrome.tabs.remove(tab.id);
+          }, 1000);
+        });
+      });
       break;
   }
 });
