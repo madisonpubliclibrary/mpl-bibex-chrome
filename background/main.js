@@ -185,6 +185,11 @@ chrome.webNavigation.onCompleted.addListener(details => {
       "file": "/content/scripts/sortItemCheckoutHistory.js",
       "allFrames": true
     });
+
+    chrome.tabs.executeScript(details.tabId, {
+      "file": "/content/scripts/selectPSTAT.js",
+      "allFrames": true
+    });
   }
 
   // Inherent scripts
@@ -208,11 +213,6 @@ chrome.webNavigation.onCompleted.addListener(details => {
     "allFrames": true
   });
 
-  /*chrome.tabs.executeScript(details.tabId, {
-    "file": "/content/scripts/selectPSTAT.js",
-    "allFrames": true
-  });*/
-
   chrome.tabs.executeScript(details.tabId, {
     "file": "/content/scripts/separateHSA.js",
     "allFrames": true
@@ -226,7 +226,227 @@ chrome.webNavigation.onCompleted.addListener(details => {
 });
 
 chrome.runtime.onMessage.addListener(function(message, sender, reply) {
+  const OPEN_CHANNEL = true;
+  const CLOSE_CHANNEL = false;
+  let result = CLOSE_CHANNEL;
+
   switch (message.key) {
+    case "queryGeocoder":
+      var matchAddr, county, countySub, censusTract, zip;
+
+      const baseURL = "https://geocoding.geo.census.gov/geocoder/geographies/address?street="
+        countyURL = baseURL + message.addressURI + "&city=" + message.city
+            + "&state=wi&benchmark=Public_AR_Current&vintage=Current_Current&layers=Counties&format=json",
+        countySubdivisionURL = baseURL + message.addressURI + "&city=" + message.city
+            + "&state=wi&benchmark=Public_AR_Current&vintage=Current_Current&layers=County+Subdivisions&format=json",
+        censusTractURL = baseURL + message.addressURI + "&city=" + message.city
+            + "&state=wi&benchmark=Public_AR_Current&vintage=Current_Current&layers=Census Tracts&format=json";
+
+      const getCounty = fetch(countyURL, {"method": "GET"}).then(response => {
+        if(!response.ok && response.status != '400') {
+          throw new Error('[census.gov] HTTP error, status = ' + response.status);
+        }
+        return response.json();
+      });
+
+      const getCountySub = fetch(countySubdivisionURL, {"method": "GET"}).then(response => {
+        if(!response.ok && response.status != '400') {
+          throw new Error('[census.gov] HTTP error, status = ' + response.status);
+        }
+        return response.json();
+      });
+
+      const getCensusTract = fetch(censusTractURL, {"method": "GET"}).then(response => {
+        if(!response.ok && response.status != '400') {
+          throw new Error('[census.gov] HTTP error, status = ' + response.status);
+        }
+        return response.json();
+      });
+
+      Promise.all([getCounty,getCountySub,getCensusTract]).then(vals => {
+        var countyData = vals[0], countySubData = vals[1],
+            censusTractData = vals[2];
+
+        if (countyData.errors) {
+          throw new Error(countyData.errors.join("; "));
+        } else if (!countyData || !countyData.result || countyData.result.addressMatches.length === 0) {
+          throw new Error("No county data matched given address.");
+        } else if (countySubData.errors) {
+          throw new Error(countySubData.errors.join("; "));
+        } else if (!countySubData || !countySubData.result || countySubData.result.addressMatches.length === 0) {
+          throw new Error("No county subdivision data matched given address.");
+        } else if (censusTractData.errors) {
+          throw new Error(censusTractData.errors.join("; "));
+        } else if (!censusTractData || !censusTractData.result || censusTractData.result.addressMatches.length === 0) {
+          throw new Error("No census tract data matched given address.");
+        } else {
+          countyData = countyData.result.addressMatches[0];
+          countySubData = countySubData.result.addressMatches[0];
+          censusTractData = censusTractData.result.addressMatches[0];
+
+          matchAddr = countyData.matchedAddress.split(',')[0].toUpperCase();
+          county = countyData.geographies.Counties[0].BASENAME;
+          countySub = countySubData.geographies['County Subdivisions'][0].NAME;
+          zip = countyData.addressComponents.zip;
+          censusTract = censusTractData.geographies['Census Tracts'];
+          if (censusTract) censusTract = censusTract[0].BASENAME;
+
+          if (matchAddr && county && countySub && censusTract && zip) {
+            if (county === "Dane" && /^(Middleton|Sun Prairie|Verona) (city|village)$/.test(countySub)) {
+              const libCode = countySub.substring(0,3).toLowerCase(),
+                alderURL = "https://mpl-bibex.lrschneider.com/pstats/" + libCode +
+                  "?val=all&regex=true";
+
+              return fetch(alderURL, {"method": "GET"}).then(response => {
+                return response.json();
+              }).then(json => {
+                var value = "";
+
+                for (var i = 0; i < json.length; i++) {
+                  var regex = new RegExp(json[i].regex, "i");
+                  if (regex.test(matchAddr)) {
+                    value = json[i].value;
+                  }
+                }
+
+                return Promise.resolve({
+                  "key": "returnCensusData",
+                  "matchAddr": matchAddr,
+                  "county": county,
+                  "countySub": countySub,
+                  "censusTract": censusTract,
+                  "zip": zip,
+                  "value": value
+                });
+              });
+            } else {
+              return Promise.resolve({
+                "key": "returnCensusData",
+                "matchAddr": matchAddr,
+                "county": county,
+                "countySub": countySub,
+                "censusTract": censusTract,
+                "zip": zip
+              });
+            }
+          }
+        }
+      }).then(res => {
+        reply(res);
+      }, reject => {
+        reply({
+          "key": "failedCensusData",
+          "rejectMsg": reject.message
+        });
+      });
+      result = OPEN_CHANNEL;
+      break;
+    case "queryAlderDists":
+      const alderURL = "https://mpl-bibex.lrschneider.com/pstats?library="
+          + message.code;
+
+      fetch(alderURL, {"method": "GET"}).then(response => {
+        if(!response.ok) {
+          throw new Error('[lrschneider.com] HTTP error, status = ' + response.status);
+        }
+        return response.json();
+      }).then(json => {
+        var value, zip;
+        for (var i = 0; i < json.length; i++) {
+          var regex = new RegExp(json[i].regex, "i");
+
+          if (regex.test(message.address)) {
+            value = json[i].value;
+            zip = json[i].zip
+            break;
+          }
+        }
+
+        if (value && zip) {
+          reply({
+            "key": "returnAlderDists",
+            "value": value,
+            "zip": zip
+          });
+        } else if (value) {
+          reply({
+            "key": "returnAlderDists",
+            "value": value
+          });
+        } else {
+          reply({"key": "failedAlderDists"});
+        }
+      });
+      result = OPEN_CHANNEL;
+      break;
+    case "alternatePSTAT":
+      chrome.tabs.query({
+        "currentWindow": true,
+        "active": true
+      }, function(tabs) {
+        for (let tab of tabs) {
+          chrome.tabs.sendMessage(tab.id, {
+            "key": "findAlternatePSTAT"
+          });
+        }
+      });
+      break;
+    case "openFactFinder":
+      chrome.tabs.create({
+        "url": "https://factfinder.census.gov/faces/nav/jsf/pages/searchresults.xhtml",
+        "active": true
+      }, function(tab) {
+        chrome.tabs.executeScript(tab.id, {
+          "file": "/content/scripts/openFactFinder.js",
+          "allFrames": true
+        }, function() {
+          chrome.tabs.sendMessage(tab.id, {
+            "key": "addressData",
+            "address": message.address,
+            "city": message.city
+          });
+        });
+      });
+      break;
+    case "findNearestLib":
+      var scls = new SCLSLibs();
+      const mapURL = "https://maps.googleapis.com/maps/api/distancematrix/json" +
+          "?key=AIzaSyAAYcV9I6AAd4EQphC4Ynai5dmOScYBggA&origins=" +
+          message.address + "&destinations=" + scls.getURI(message.selected);
+
+      fetch(mapURL, {"method": "GET"}).then(response => {
+        if (!response.ok) {
+          throw new Error('[maps.googleapis.com] HTTP error, status = ' + response.status);
+        }
+        return response.json();
+      }).then(json => {
+        if (json.error_message) {
+          throw new Error(json.error_message);
+        }
+
+        var distanceData = json.rows[0].elements,
+          distanceOrder = scls.getOrder(message.selected);
+          distArray = [];
+
+        for (var i = 0; i < distanceData.length; i++) {
+          distArray.push([distanceOrder[i], distanceData[i].distance.value])
+        }
+
+        return Promise.resolve(distArray.sort((a,b) => {
+          if (a[1] < b[1]) return -1;
+          else if (a[1] > b[1]) return 1;
+          else return 0;
+        })[0]);
+      }).then(arr => {
+        reply(arr);
+      }, reject => {
+        reply({
+          "key": "failedNearestLib",
+          "rejectMsg": reject.message
+        });
+      });
+      result = OPEN_CHANNEL;
+      break;
     case "updateExtensionIcon":
       setIcon();
       break;
@@ -242,18 +462,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
         "allFrames": true
       });
       break;
-    case "alternatePSTAT":
-      /*chrome.tabs.query({
-        "currentWindow": true,
-        "active": true
-      }).then(tabs => {
-        for (let tab of tabs) {
-          chrome.tabs.sendMessage(tab.id, {
-            "key": "findAlternatePSTAT"
-          });
-        }
-      });*/
-      break;
     case "printBarcode":
       chrome.storage.sync.get('receiptFont', res => {
         let receiptFont = res.hasOwnProperty('receiptFont') ? res.receiptFont : "36px";
@@ -261,7 +469,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
         chrome.tabs.create({
           "url": "/printBarcode/printBarcode.html?barcode=" + message.barcode + "&fontSize=" + receiptFont,
           "active": false
-        }).then(tab => {
+        }, function(tab) {
           setTimeout(() => {
             chrome.tabs.remove(tab.id);
           }, 1000);
@@ -269,4 +477,5 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
       });
       break;
   }
+  return result;
 });

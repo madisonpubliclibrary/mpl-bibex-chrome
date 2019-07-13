@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="printProblemForm.css" />
+    <title>[printing] Problem Item Form</title>
+  </head>
+  <body>
+    <section id="title">
+      <p>Problem Item Form</p>
+      <p id="dontCheckIn">DO NOT CHECK IN THE ITEM!!!</p>
+    </section>
+    <section class="boxed" id="toWrap">
+      <div>Route To: <span id="to"><span></div>
+    </section>
+    <section id="sentFrom">
+      <div>Date: <span id="date"></span></div>
+      <div>From: <span id="from"></span></div>
+      <div>Staff name: <span id="staffName"></span></div>
+    </section>
+    <section>
+      <div id="typeWrap">Type: <span id="type"></span></div>
+    </section>
+    <section>
+      <div id="idWrap">Problem identified and/or received by: <span id="idBy"></span></div>
+      <div id="receivedViaWrap">Item received via: <span id="receivedVia"></span></div>
+      <div id="ckiBySorter" class="hide">&#10004; Item was checked in by an automatic sorter</div>
+    </section>
+    <section class="boxed" id="detailsWrap">
+      <div>Details:&nbsp;<span id="details"></span></div>
+    </section>
+    <section id="itemDetails">
+      <div id="itemTitleWrap">Item title: <span id="itemTitle"></span></div>
+      <div id="itemBarcodeWrap">Item Barcode: <span id="itemBarcode"></span></div>
+    </section>
+    <section>
+      <div>Patron information:</div>
+      <div id="patronWrap"><span id="patron"></span></div>
+      <div id="patronBarcodeWrap">BC: <span id="patronBarcode"></span></div>
+      <div id="patronPhoneWrap">PH: <span id="patronPhone"></span></div>
+      <div id="patronEmailWrap">EM: <span id="patronEmail"></span></div>
+    </section>
+    <section>
+      <div id="cCodeWrap">Collection Code: <span id="cCode"></span></div>
+      <div id="holdsWrap">Holds: <span id="holds"></span></div>
+      <div id="copiesWrap">Copies: <span id="copies"></span></div>
+      <div id="useWrap">Use: <span id="use"></span></div>
+    </section>
+    <section>
+      <div id="notifiedWrap">Notified on: <span id="notified"></span></div>
+      <div id="staffInitWrap">Staff Init.: <span id="staffInit"></span></div>
+      <div id="contactByWrap">Contacted Via: <span id="contactedVia"></span></div>
+    </section>
+    <div id="spacer">.</div>
+    <script type="text/javascript" src="printProblemForm.js"></script>
+  </body>
+</html>
