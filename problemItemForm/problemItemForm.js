@@ -1,4 +1,4 @@
-(function() {
+(function(){
   'use strict';
 
   const to = document.getElementById("to");
@@ -51,7 +51,7 @@
 
   let formatDateForDisplay = function(date) {
     if (date && date !== "") {
-      const d = new Date(date);
+      var d = new Date(date+'T00:00:00');
       return (d.getMonth()+1) + "/" + d.getDate() + "/" + d.getFullYear();
     } else {
       return "";
@@ -80,10 +80,10 @@
       if (patronBarcode.classList.contains("invalidInput")) {
         patronBarcode.classList.remove("invalidInput");
       }
-      browser.runtime.sendMessage({
+      chrome.runtime.sendMessage({
         "key": "getPatronData",
         "patronBarcode": patronBarcode.value
-      }).then(resArr => {
+      }, resArr => {
         if (resArr.length > 0) {
           let res = resArr[0];
 
@@ -131,30 +131,17 @@
       if (itemBarcode.classList.contains("invalidInput")) {
         itemBarcode.classList.remove("invalidInput");
       }
-      browser.runtime.sendMessage({
+      chrome.runtime.sendMessage({
         "key": "getItemData",
         "itemBarcode": itemBarcode.value
-      }).then(res => {
-        console.log(res);
+      }, res => {
         itemTitle.value = res.title;
         cCode.value = res.cCode;
         holds.value = res.holds;
         copies.value = res.copies;
 
-        if (res.hasOwnProperty('patronID')) {
-          browser.runtime.sendMessage({
-            "key": "getPatronData",
-            "patronID": res.patronID
-          }).then(resArr => {
-            if (resArr.length > 0) {
-              let patronData = resArr[0];
-
-              patron.value = patronData.patronName;
-              patronBarcode.value = patronData.patronBarcode;
-              patronPhone.value = patronData.patronPhone;
-              patronEmail.value = patronData.patronEmail;
-            }
-          });
+        if (!isNaN(res.totalUse)) {
+          use.value = res.totalUse;
         }
       });
     } else {
@@ -191,7 +178,7 @@
 
       window.location.hash = "instructions";
 
-      browser.runtime.sendMessage({
+      chrome.runtime.sendMessage({
         "key": "printProblemForm",
         "data": [
           ["to", to.value.toUpperCase()],
@@ -236,7 +223,7 @@
     }
   }
 
-  browser.runtime.onMessage.addListener(msg => {
+  chrome.runtime.onMessage.addListener(msg => {
     if (msg.key === "patronData") {
       patron.value = msg.data.patronName;
       patronBarcode.value = msg.data.patronBarcode;

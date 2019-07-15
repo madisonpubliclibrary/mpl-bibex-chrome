@@ -225,6 +225,76 @@ chrome.webNavigation.onCompleted.addListener(details => {
 
 });
 
+// Create and handle context menu item for problem item form
+chrome.contextMenus.create({
+  "id": "start-pi-form",
+  "title": "Use Barcode in Problem Item Form",
+  "contexts": ["link", "selection"],
+  "visible": true
+});
+
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+  if (info.menuItemId === "start-pi-form") {
+    var barcode;
+
+    function sendErrorMsg(msg) {
+      chrome.tabs.executeScript(tab.id, {
+        "code": "alert('" + msg + "');"
+      });
+    }
+
+    function openPIForm(barcode) {
+      if (barcode.match(/[0-9]{14}/g)) {
+        if (barcode.match(/[0-9]{14}/g).length === 1) {
+          barcode = /[0-9]{14}/.exec(barcode);
+
+          if (barcode) barcode = barcode[0];
+
+          switch (barcode.substr(0, 1)) {
+            case "2":
+              chrome.tabs.create({
+                "url": chrome.runtime.getURL("../problemItemForm/problemItemForm.html") + "?patron=" + barcode
+              });
+              break;
+            case "3":
+              chrome.tabs.create({
+                "url": chrome.runtime.getURL("../problemItemForm/problemItemForm.html") + "?item=" + barcode
+              });
+              break;
+            default:
+              sendErrorMsg("ERROR: Unable to determine barcode type.");
+              break;
+          }
+        } else {
+          sendErrorMsg("ERROR: Multiple barcodes found in selection.");
+        }
+      } else {
+        sendErrorMsg("ERROR: Barcode not found in selection or link.");
+      }
+    };
+
+    // Populate barcode based on the particular context type
+    if (info.selectionText) {
+      openPIForm(info.selectionText);
+    } else if (info.linkUrl) {
+      chrome.tabs.executeScript(tab.id, {
+        "code": "document.getElementById('staff-iframe').contentWindow.document.querySelector('a[href=\"" + info.linkUrl.split('bibliovation.com')[1] + "\"]').textContent;"
+      }, function(res) {
+        res[0] = res[0].trim();
+        if(/^[23]\d{13}$/.test(res[0])) {
+          openPIForm(res[0]);
+        } else {
+          sendErrorMsg("ERROR: Failed to extract link text.");
+          return;
+        }
+      });
+    } else {
+      sendErrorMsg("ERROR: Failed to extract text data.");
+      return;
+    }
+  }
+});
+
 chrome.runtime.onMessage.addListener(function(message, sender, reply) {
   const OPEN_CHANNEL = true;
   const CLOSE_CHANNEL = false;
@@ -475,6 +545,81 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
           }, 1000);
         });
       });
+      break;
+    case "getPatronData":
+      new Promise((resolve, reject) => {
+        if (message.hasOwnProperty('patronBarcode')) {
+          chrome.tabs.create({
+            "url": "https://lakscls-sandbox.bibliovation.com/cgi-bin/koha/members/member.pl?member=" +
+                message.patronBarcode,
+            "active": false
+          }, function(tab) {
+            chrome.tabs.executeScript(tab.id, {
+              "code": "document.querySelector('a[href^=\"/app/staff/patron\"]').href.match(/\\d+/)[0]"
+            }, function(patronID) {
+              chrome.tabs.remove(tab.id);
+              if (patronID.length > 0 && /\d+/.test(patronID[0])) {
+                resolve(patronID[0]);
+              } else {
+                throw new Error('Failed to get patron ID number.');
+              }
+            });
+          });
+        } else if (message.hasOwnProperty('patronID')) {
+          resolve(message.patronID);
+        } else {
+          throw new Error('Failed to get patron ID number.');
+        }
+      }).then(patronID => {
+        chrome.tabs.create({
+          "url": "https://lakscls-sandbox.bibliovation.com/cgi-bin/koha/members/moremember.pl?borrowernumber=" +
+              patronID,
+          "active": false
+        }, function(tab) {
+          chrome.tabs.executeScript(tab.id, {
+            "file": "/problemItemForm/getPatronData.js"
+          }, function(res) {
+            chrome.tabs.remove(tab.id);
+            reply(res);
+          });
+        });
+      });
+      result = OPEN_CHANNEL;
+      break;
+    case "getItemData":
+      new Promise((resolve, reject) => {
+        chrome.tabs.create({
+          "url": "https://lakscls-sandbox.bibliovation.com/app/search/" + message.itemBarcode,
+          "active": true
+        }, function(tab) {
+          chrome.tabs.executeScript(tab.id, {
+            "file": "/problemItemForm/getItemBib.js"
+          }, function(res) {
+            res[0].then(bibNum => {
+              chrome.tabs.remove(tab.id);
+              if (bibNum.length > 0 && /\d+/.test(bibNum)) {
+                resolve(bibNum[0]);
+              } else {
+                throw new Error('Failed to get item bib number.');
+              }
+            });
+          });
+        });
+      }).then(bibNum => {
+        chrome.tabs.create({
+          "url": "https://lakscls-sandbox.bibliovation.com/app/staff/bib/" +
+              bibNum + "/details" + "?mbxItemBC=" + message.itemBarcode,
+          "active": true
+        }, function(tab) {
+          chrome.tabs.executeScript(tab.id, {
+            "file": "/problemItemForm/getItemTitleCopiesHolds.js"
+          }, function(res) {
+            chrome.tabs.remove(tab.id);
+            reply(res[0]);
+          });
+        });
+      });
+      result = OPEN_CHANNEL;
       break;
   }
   return result;
