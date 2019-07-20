@@ -587,7 +587,46 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
       result = OPEN_CHANNEL;
       break;
     case "getItemData":
-      new Promise((resolve, reject) => {
+      const data = {};
+      let bibNum;
+      let itemNum;
+      let useThisYear;
+      let pastUse;
+
+      chrome.tabs.create({
+        "url": "https://lakscls-sandbox.bibliovation.com/app/search/" + message.itemBarcode,
+        "active": true
+      }, function(tab) {
+        const getBibNumListener = setInterval(() => {
+          chrome.tabs.executeScript(tab.id, {
+            "file": "/problemItemForm/getItemBib.js"
+          }, res => {
+             res = res[0];
+             if (res && res.hasOwnProperty('found') && res.found) {
+               clearInterval(getBibNumListener);
+               chrome.tabs.remove(tab.id);
+               chrome.tabs.create({
+                 "url": "https://lakscls-sandbox.bibliovation.com/app/staff/bib/" +
+                     res.bib + "/details" + "?mbxItemBC=" + message.itemBarcode,
+                 "active": true
+               }, function(tab) {
+                 const getItemData = setInterval(() => {
+                  chrome.tabs.executeScript(tab.id, {
+                     "file": "/problemItemForm/getItemTitleCopiesHolds.js"
+                  }, function(res) {
+                    if (res && res.hasOwnProperty('found') && res.found) {
+                    clearInterval(getItemData);
+                    chrome.tabs.remove(tab.id);
+                    reply(res[0]);
+                    }
+                  });
+                }, 650);
+               });
+             }
+          });
+        }, 650);
+      });
+      /*new Promise((resolve, reject) => {
         chrome.tabs.create({
           "url": "https://lakscls-sandbox.bibliovation.com/app/search/" + message.itemBarcode,
           "active": true
@@ -595,6 +634,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
           chrome.tabs.executeScript(tab.id, {
             "file": "/problemItemForm/getItemBib.js"
           }, function(res) {
+            console.log(res);
             res[0].then(bibNum => {
               chrome.tabs.remove(tab.id);
               if (bibNum.length > 0 && /\d+/.test(bibNum)) {
@@ -618,7 +658,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
             reply(res[0]);
           });
         });
-      });
+      });*/
       result = OPEN_CHANNEL;
       break;
   }
