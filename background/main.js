@@ -596,70 +596,52 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
       chrome.tabs.create({
         "url": "https://lakscls-sandbox.bibliovation.com/app/search/" + message.itemBarcode,
         "active": true
-      }, function(tab) {
+      }, tab => {
         const getBibNumListener = setInterval(() => {
           chrome.tabs.executeScript(tab.id, {
             "file": "/problemItemForm/getItemBib.js"
           }, res => {
-             res = res[0];
-             if (res && res.hasOwnProperty('found') && res.found) {
-               clearInterval(getBibNumListener);
-               chrome.tabs.remove(tab.id);
-               chrome.tabs.create({
-                 "url": "https://lakscls-sandbox.bibliovation.com/app/staff/bib/" +
-                     res.bib + "/details" + "?mbxItemBC=" + message.itemBarcode,
-                 "active": true
-               }, function(tab) {
-                 const getItemData = setInterval(() => {
+            res = res[0];
+            if (res && res.hasOwnProperty('found') && res.found) {
+              clearInterval(getBibNumListener);
+              chrome.tabs.remove(tab.id);
+              chrome.tabs.create({
+                "url": "https://lakscls-sandbox.bibliovation.com/app/staff/bib/" +
+                    res.bib + "/details" + "?mbxItemBC=" + message.itemBarcode,
+                "active": true
+              }, tab => {
+                const getItemData = setInterval(() => {
                   chrome.tabs.executeScript(tab.id, {
                      "file": "/problemItemForm/getItemTitleCopiesHolds.js"
-                  }, function(res) {
-                    if (res && res.hasOwnProperty('found') && res.found) {
-                    clearInterval(getItemData);
-                    chrome.tabs.remove(tab.id);
-                    reply(res[0]);
+                  }, res => {
+                    if (res && res[0] && res[0].hasOwnProperty('found') && res[0].found) {
+                      clearInterval(getItemData);
+                      chrome.tabs.remove(tab.id);
+                      reply(res[0]);
                     }
                   });
                 }, 650);
-               });
-             }
+              });
+            }
           });
         }, 650);
       });
-      /*new Promise((resolve, reject) => {
-        chrome.tabs.create({
-          "url": "https://lakscls-sandbox.bibliovation.com/app/search/" + message.itemBarcode,
-          "active": true
-        }, function(tab) {
-          chrome.tabs.executeScript(tab.id, {
-            "file": "/problemItemForm/getItemBib.js"
-          }, function(res) {
-            console.log(res);
-            res[0].then(bibNum => {
-              chrome.tabs.remove(tab.id);
-              if (bibNum.length > 0 && /\d+/.test(bibNum)) {
-                resolve(bibNum[0]);
-              } else {
-                throw new Error('Failed to get item bib number.');
-              }
-            });
-          });
-        });
-      }).then(bibNum => {
-        chrome.tabs.create({
-          "url": "https://lakscls-sandbox.bibliovation.com/app/staff/bib/" +
-              bibNum + "/details" + "?mbxItemBC=" + message.itemBarcode,
-          "active": true
-        }, function(tab) {
-          chrome.tabs.executeScript(tab.id, {
-            "file": "/problemItemForm/getItemTitleCopiesHolds.js"
-          }, function(res) {
-            chrome.tabs.remove(tab.id);
-            reply(res[0]);
-          });
-        });
-      });*/
       result = OPEN_CHANNEL;
+      break;
+    case "printProblemForm":
+      chrome.tabs.create({
+        "active": false,
+        "url": chrome.runtime.getURL('../problemItemForm/printProblemForm.html')
+      }, tab => {
+        setTimeout(() => {
+          chrome.tabs.sendMessage(tab.id, {
+            "key": "printProblemForm",
+            "data": message.data
+          }, () => {
+            chrome.tabs.remove(tab.id);
+          });
+        }, 500);
+      });
       break;
   }
   return result;

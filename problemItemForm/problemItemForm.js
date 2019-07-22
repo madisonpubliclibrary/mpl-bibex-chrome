@@ -140,9 +140,22 @@
         holds.value = res.holds;
         copies.value = res.copies;
 
-        if (!isNaN(res.totalUse)) {
-          use.value = res.totalUse;
+        if (res.hasOwnProperty('patronID')) {
+          chrome.runtime.sendMessage({
+            "key": "getPatronData",
+            "patronID": res.patronID
+          }, resArr => {
+            if (resArr.length > 0) {
+              let patronData = resArr[0];
+
+              patron.value = patronData.patronName;
+              patronBarcode.value = patronData.patronBarcode;
+              patronPhone.value = patronData.patronPhone;
+              patronEmail.value = patronData.patronEmail;
+            }
+          });
         }
+
       });
     } else {
       if (!itemBarcode.classList.contains("invalidInput")) {
