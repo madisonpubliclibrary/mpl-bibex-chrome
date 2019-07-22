@@ -1,4 +1,4 @@
-browser.runtime.onMessage.addListener(message => {
+chrome.runtime.onMessage.addListener(message => {
   if (message.key === "printProblemForm" ) {
     for (let d of message.data) {
       var elt = document.getElementById(d[0]);

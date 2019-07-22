@@ -175,11 +175,6 @@ var SCLSLibs = function() {
 // Load preference-selected function files
 chrome.webNavigation.onCompleted.addListener(details => {
   if (details.parentFrameId === 0) {
-    // Optional scripts
-    chrome.storage.sync.get(null, res => {
-
-    });
-
     // Inherent scripts
     chrome.tabs.executeScript(details.tabId, {
       "file": "/content/scripts/sortItemCheckoutHistory.js",
@@ -191,6 +186,17 @@ chrome.webNavigation.onCompleted.addListener(details => {
       "allFrames": true
     });
   }
+
+  // Optional scripts
+  chrome.storage.sync.get(null, res => {
+    if (!res.hasOwnProperty('updateAccountType') ||
+        (res.hasOwnProperty('updateAccountType') && res.updateAccountType)) {
+      browser.tabs.executeScript(details.tabId, {
+        "file": "/content/scripts/opt/updateAccountType.js",
+        "allFrames": true
+      });
+    }
+  });
 
   // Inherent scripts
   chrome.tabs.executeScript(details.tabId, {
