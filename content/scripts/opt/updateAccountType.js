@@ -1,15 +1,13 @@
 (function(){
   'use strict';
+  if (/\/cgi-bin\/koha\/members\/memberentry\.pl/.test(window.location)) {
+    function calculateAge(birthday) { // birthday is a date
+      var ageDifMs = Date.now() - birthday.getTime(),
+        ageDate = new Date(ageDifMs); // miliseconds from epoch
+      return Math.abs(ageDate.getFullYear() - 1970);
+    }
 
-  function calculateAge(birthday) { // birthday is a date
-    var ageDifMs = Date.now() - birthday.getTime(),
-      ageDate = new Date(ageDifMs); // miliseconds from epoch
-    return Math.abs(ageDate.getFullYear() - 1970);
-  }
-
-  const birthdayField = document.getElementById('dateofbirth');
-
-  if (birthdayField) {
+    const birthdayField = document.getElementById('dateofbirth');
     let birthday;
     let patronCategory = document.getElementsByName('categorycode')[0];
     let saveButtonWrapper = document.getElementsByClassName('action')[0];

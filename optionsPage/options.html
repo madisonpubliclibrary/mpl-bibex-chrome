@@ -15,6 +15,7 @@
           <optgroup label="Library">
             <option value="MAD">MAD</option>
             <option value="MID">MID</option>
+            <option value="PCPL">PCPL</option>
             <option value="SUN">SUN</option>
           </optgroup>
         </select>
@@ -99,6 +100,20 @@
               </label>
             </td>
             <td><label for="sundayDropbox">Automatically checks "Dropbox Mode" on Sundays. If enabled, unchecking the box for dropbox mode on Sundays will disable it for 3 minutes (unless manually enabled).</label></td>
+          </tr>
+        </table>
+      </div>
+      <div class="option">
+        <h1>Problem Form &#8211; Find Item Data in Background</h1>
+        <table>
+          <tr>
+            <td>
+              <label class="switch" id="silentItemDataSwitch">
+                <input type="checkbox" id="silentItemData">
+                <span class="slider"></span>
+              </label>
+            </td>
+            <td><label for="silentItemData">Bibliovation item detail pages will be opened in the background so that you may continue to fill out the problem form while data is being gathered. Enabling this option will reduce the speed that item data may be retrieved.</label></td>
           </tr>
         </table>
       </div>

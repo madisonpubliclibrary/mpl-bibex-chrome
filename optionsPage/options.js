@@ -16,6 +16,7 @@ const sepAllAV = document.getElementById("sepAllAV");
 const receiptFont = document.getElementById("receiptFont");
 const sundayDropbox = document.getElementById("sundayDropbox");
 const sundayDropboxPaused = document.getElementById("sundayDropboxPaused");
+const silentItemData = document.getElementById("silentItemData");
 const shortcutText1 = document.getElementById("shortcutText1");
 const shortcutLink1 = document.getElementById("shortcutLink1");
 const shortcutText2 = document.getElementById("shortcutText2");
@@ -49,6 +50,7 @@ function restoreOptions() {
     video.checked = res.video;
     receiptFont.value = res.receiptFont;
     sundayDropbox.checked = res.sundayDropbox;
+    silentItemData.checked = res.silentItemData;
     shortcutText1.value = res.shortcutText1;
     shortcutLink1.value = res.shortcutLink1;
     shortcutText2.value = res.shortcutText2;
@@ -102,6 +104,7 @@ document.getElementById("setDefault").addEventListener('click', function() {
     "receiptFont": "36px",
     "sundayDropbox": true,
     "sundayDropboxPaused": false,
+    "silentItemData": false,
     "shortcutText1": "Koha—Checkin",
     "shortcutLink1": "http://scls-staff.kohalibrary.com/cgi-bin/koha/circ/returns.pl",
     "shortcutText2": "Koha—Checkout",
@@ -185,6 +188,9 @@ receiptFont.addEventListener('change', function() {
 });
 document.getElementById("sundayDropboxSwitch").addEventListener('click', function() {
    chrome.storage.sync.set({"sundayDropbox": sundayDropbox.checked});
+});
+document.getElementById("silentItemDataSwitch").addEventListener('click', function() {
+   chrome.storage.sync.set({"silentItemData": silentItemData.checked});
 });
 document.getElementById("shortcutText1").addEventListener('blur', function() {
   chrome.storage.sync.set({"shortcutText1": shortcutText1.value});

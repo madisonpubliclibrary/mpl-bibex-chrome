@@ -14,6 +14,17 @@ function setIcon() {
           }
         });
         break;
+      case "PCPL":
+        chrome.browserAction.setIcon({
+          "path": {
+            "16": "content/img/pcpl-icon-16.png",
+            "32": "content/img/pcpl-icon-32.png",
+            "48": "content/img/pcpl-icon-48.png",
+            "64": "content/img/pcpl-icon-64.png",
+            "128": "content/img/pcpl-icon-128.png"
+          }
+        });
+        break;
       case "SCLS":
         chrome.browserAction.setIcon({
           "path": {
@@ -174,7 +185,7 @@ var SCLSLibs = function() {
 
 // Load preference-selected function files
 chrome.webNavigation.onCompleted.addListener(details => {
-  if (details.parentFrameId === 0) {
+  if (details.parentFrameId <= 0) {
     // Inherent scripts
     chrome.tabs.executeScript(details.tabId, {
       "file": "/content/scripts/sortItemCheckoutHistory.js",
@@ -185,18 +196,60 @@ chrome.webNavigation.onCompleted.addListener(details => {
       "file": "/content/scripts/selectPSTAT.js",
       "allFrames": true
     });
-  }
 
-  // Optional scripts
-  chrome.storage.sync.get(null, res => {
-    if (!res.hasOwnProperty('updateAccountType') ||
-        (res.hasOwnProperty('updateAccountType') && res.updateAccountType)) {
-      browser.tabs.executeScript(details.tabId, {
-        "file": "/content/scripts/opt/updateAccountType.js",
-        "allFrames": true
-      });
-    }
-  });
+    // Optional scripts
+    chrome.storage.sync.get(null, res => {
+      if (!res.hasOwnProperty('restrictPatronFields') ||
+          (res.hasOwnProperty('restrictPatronFields') && res.restrictPatronFields)) {
+        chrome.tabs.executeScript(details.tabId, {
+          "file": "/content/scripts/opt/restrictPatronFields.js",
+          "allFrames": true
+        });
+      }
+
+      if (!res.hasOwnProperty('parseAddr') ||
+          (res.hasOwnProperty('parseAddr') && res.parseAddr)) {
+        chrome.tabs.executeScript(details.tabId, {
+          "file": "/content/scripts/opt/parsePatronAddr.js",
+          "allFrames": true
+        });
+      }
+
+      if (!res.hasOwnProperty('updateAccountType') ||
+          (res.hasOwnProperty('updateAccountType') && res.updateAccountType)) {
+        chrome.tabs.executeScript(details.tabId, {
+          "file": "/content/scripts/opt/updateAccountType.js",
+          "allFrames": true
+        });
+      }
+
+      if (!res.hasOwnProperty('addPatronNotes') ||
+          (res.hasOwnProperty('addPatronNotes') && res.addPatronNotes)) {
+        chrome.tabs.executeScript(details.tabId, {
+          "file": "/content/scripts/opt/patronMessages.js",
+          "allFrames": true
+        });
+      }
+    });
+
+    chrome.storage.sync.get(['sundayDropbox','sundayDropboxPaused'], res => {
+      if ((!res.hasOwnProperty('sundayDropbox') ||
+          (res.hasOwnProperty('sundayDropbox') && res.sundayDropbox)) && (new Date()).getDay() === 0) {
+        // If sundayDropbox is not paused
+        if (!res.hasOwnProperty('sundayDropboxPaused') ||
+            (res.hasOwnProperty('sundayDropboxPaused') && !res.sundayDropboxPaused)) {
+          chrome.tabs.executeScript(details.tabId, {
+            "file": "/content/scripts/opt/sundayDropbox.js",
+            "allFrames": true
+          });
+        }
+      } else {
+        if (res.hasOwnProperty('sundayDropboxPaused') && res.sundayDropboxPaused) {
+          chrome.storage.sync.set({"sundayDropboxPaused": false});
+        }
+      }
+    });
+  }
 
   // Inherent scripts
   chrome.tabs.executeScript(details.tabId, {
@@ -228,7 +281,6 @@ chrome.webNavigation.onCompleted.addListener(details => {
     "file": "/content/scripts/betterLogo.js",
     "allFrames": true
   });
-
 });
 
 // Create and handle context menu item for problem item form
@@ -523,8 +575,30 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
       });
       result = OPEN_CHANNEL;
       break;
+    case "parsePatronAddr":
+      const madAddrURL = "https://mpl-bibex.lrschneider.com/madAddr";
+
+      fetch(madAddrURL, {"method": "GET"}).then(response => {
+        if (!response.ok) {
+          throw new Error('[lrschneider.com] HTTP error, status = ' + response.status);
+        }
+        response.json().then(json => {
+          reply(json);
+        });
+      });
+      result = OPEN_CHANNEL;
+      break;
     case "updateExtensionIcon":
       setIcon();
+      break;
+    case "pauseSundayDropbox":
+      chrome.storage.sync.set({"sundayDropboxPaused": true});
+      setTimeout(() => {
+        chrome.storage.sync.set({"sundayDropboxPaused": false});
+      }, 180000); // 3min
+      break;
+    case "resumeSundayDropbox":
+        chrome.storage.sync.set({"sundayDropboxPaused": false});
       break;
     case "addLostCardNote":
       chrome.tabs.executeScript({
@@ -599,38 +673,41 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
       let useThisYear;
       let pastUse;
 
-      chrome.tabs.create({
-        "url": "https://lakscls-sandbox.bibliovation.com/app/search/" + message.itemBarcode,
-        "active": true
-      }, tab => {
-        const getBibNumListener = setInterval(() => {
-          chrome.tabs.executeScript(tab.id, {
-            "file": "/problemItemForm/getItemBib.js"
-          }, res => {
-            res = res[0];
-            if (res && res.hasOwnProperty('found') && res.found) {
-              clearInterval(getBibNumListener);
-              chrome.tabs.remove(tab.id);
-              chrome.tabs.create({
-                "url": "https://lakscls-sandbox.bibliovation.com/app/staff/bib/" +
-                    res.bib + "/details" + "?mbxItemBC=" + message.itemBarcode,
-                "active": true
-              }, tab => {
-                const getItemData = setInterval(() => {
-                  chrome.tabs.executeScript(tab.id, {
-                     "file": "/problemItemForm/getItemTitleCopiesHolds.js"
-                  }, res => {
-                    if (res && res[0] && res[0].hasOwnProperty('found') && res[0].found) {
-                      clearInterval(getItemData);
-                      chrome.tabs.remove(tab.id);
-                      reply(res[0]);
-                    }
-                  });
-                }, 650);
-              });
-            }
-          });
-        }, 650);
+      chrome.storage.sync.get('silentItemData', function(res) {
+        let isSilent = res.hasOwnProperty('silentItemData') ? res.silentItemData : false;
+        chrome.tabs.create({
+          "url": "https://lakscls-sandbox.bibliovation.com/app/search/" + message.itemBarcode,
+          "active": !isSilent
+        }, tab => {
+          const getBibNumListener = setInterval(() => {
+            chrome.tabs.executeScript(tab.id, {
+              "file": "/problemItemForm/getItemBib.js"
+            }, res => {
+              res = res[0];
+              if (res && res.hasOwnProperty('found') && res.found) {
+                clearInterval(getBibNumListener);
+                chrome.tabs.remove(tab.id);
+                chrome.tabs.create({
+                  "url": "https://lakscls-sandbox.bibliovation.com/app/staff/bib/" +
+                      res.bib + "/details" + "?mbxItemBC=" + message.itemBarcode,
+                  "active": !isSilent
+                }, tab => {
+                  const getItemData = setInterval(() => {
+                    chrome.tabs.executeScript(tab.id, {
+                       "file": "/problemItemForm/getItemTitleCopiesHolds.js"
+                    }, res => {
+                      if (res && res[0] && res[0].hasOwnProperty('found') && res[0].found) {
+                        clearInterval(getItemData);
+                        chrome.tabs.remove(tab.id);
+                        reply(res[0]);
+                      }
+                    });
+                  }, 650);
+                });
+              }
+            });
+          }, 650);
+        });
       });
       result = OPEN_CHANNEL;
       break;

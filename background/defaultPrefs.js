@@ -50,6 +50,9 @@ chrome.storage.sync.get(null, function (res)  {
   if (!res.hasOwnProperty('sundayDropbox')) {
     chrome.storage.sync.set({"sundayDropbox": true});
   }
+  if (!res.hasOwnProperty('silentItemData')) {
+    chrome.storage.sync.set({"silentItemData": false});
+  }
   if (!res.hasOwnProperty('shortcutText1') || !res.hasOwnProperty('shortcutLink1')) {
     chrome.storage.sync.set({
       "shortcutText1": "Koha—Checkin",
