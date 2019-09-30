@@ -600,6 +600,12 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
     case "resumeSundayDropbox":
         chrome.storage.sync.set({"sundayDropboxPaused": false});
       break;
+    case "addrNoteCooldown":
+      chrome.storage.sync.set({"addrNoteCooldown": true});
+      setTimeout(() => {
+        chrome.storage.sync.set({"addrNoteCooldown": false});
+      }, 5000);
+      break;
     case "addLostCardNote":
       chrome.tabs.executeScript({
         "file": "/browserAction/scripts/addLostCardNote.js",

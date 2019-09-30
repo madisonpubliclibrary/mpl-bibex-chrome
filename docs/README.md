@@ -2,7 +2,8 @@
 
 | Current Version | Install on Google Chrome | Author |
 | :-------------: | :----------------------: | :----: |
-| <br>0.3         | <br>[Install MPL BibEx][1] | Lucas Schneider<br>Library Page II<br>MPL–Central |
+| <br>0.3         | <br>[Google Chrome](https://chrome.google.com/webstore/detail/mpl-koha-patch/ojghlgghnljabcikeiipjadgblclkgpi) | Lucas Schneider<br>Library Page II<br>MPL–Central |
+ofippohbflabeiaidadhkeloeibgmgmm
 
 MPL BibEx is a WebExtension for Firefox (58+) that adds additional features to PTFS's Bibliovation Library Services Platform. BibEx is intended for use by member libraries of the South Central Library System, and, while not supported by SCLS, it is actively developed and maintained by Lucas Schneider, a Library Page II at MPL-Central.
 
@@ -29,13 +30,13 @@ MPL BibEx is a WebExtension for Firefox (58+) that adds additional features to P
 
 # Inherent features of MPL BibEx
 ## Browser action button
-An icon should be present in the top-right corner of your web browser. By default, it will be the Madison Public Library logo, but this may be changed on the extension preferences page. [Contact lucas](mailto:lschneider@madisonpubliclibrary.org) if you would like your library's logo to be an option.
+An icon should be present in the top-right corner of your web browser. By default, it will be the Madison Public Library logo, but this may be changed on the extension preferences page. [Contact Lucas](mailto:lschneider@madisonpubliclibrary.org) if you would like your library's logo to be an option.
 
 There are a number of tools and links that are accessible via the icon's dropdown panel.
 
 <dl>
   <dt>SCLS Problem Item Form:</dt>
-  <dd>Clicking this link will open a fillable SCLS Problem Item Form in a new tab. Both the patron and item data can be automatically retrieved from the barcode by clicking the button that appears after each respective field. If the item is currently checked out, retrieving data from the item barcode will also retrieve last patron data. Due to restrictions in accessing another library's item use data, use will only be retrieved if your library has permissions to edit the item's record.<br><br>When completed, the form may be sent to your receipt printer. Further instructions will appear after printing based on the type of problem (e.g. Damaged Item found in Book Drop, Parts Missing item that arrived via Transit Hold, etc.).<br><br>From any other page in Koha, there are two additional ways you can initiate the Problem Item Form. Any hyperlinked barcode number and any highlighted barcode number (i.e. selected text as when copy/pasting) may be right clicked and from the context menu you may select "Use Barcode in Problem Item Form." Not only will this open the problem form in a new tab, but it will also automatically start gathering either patron or item data based on the barcode that was selected.</dd>
+  <dd>Clicking this link will open a fillable SCLS Problem Item Form in a new tab. Both the patron and item data can be automatically retrieved from the barcode by clicking the button that appears after each respective field. If the item is currently checked out, retrieving data from the item barcode will also retrieve last patron data. Due to restrictions in accessing another library's item use data, use will only be retrieved if your library has permissions to edit the item's record.<br><br>When completed, the form may be sent to your receipt printer. Further instructions will appear after printing based on the type of problem (e.g. Damaged Item found in Book Drop, Parts Missing item that arrived via Transit Hold, etc.).<br><br>From any other page in Bibliovation, there are two additional ways you can initiate the Problem Item Form. Any hyperlinked barcode number and any highlighted barcode number (i.e. selected text as when copy/pasting) may be right clicked and from the context menu you may select "Use Barcode in Problem Item Form." Not only will this open the problem form in a new tab, but it will also automatically start gathering either patron or item data based on the barcode that was selected.</dd>
   <dt>Add Lost Library Card Note:</dt>
   <dd>This link will automatically generate both the circulation and OPAC notes to notify a patron that their library card was found. Just enter the name of your library location in the subsequent popup note, and the extension will fill in the rest. You must be currently editing a patron's record to use this tool.</dd>
   <dt>Set PSTAT from Alternate Address:</dt>
@@ -46,8 +47,8 @@ There are a number of tools and links that are accessible via the icon's dropdow
 
 Currently, the default bookmark links available are as follows:
 
-1. Koha--Checkin
-2. Koha--Checkout
+1. Bibliovation--Checkin
+2. Bibliovation--Checkout
 3. American Fact Finder (for PSTAT lookup)
 4. Madison Public Library's Homepage
 5. MPL staff website
@@ -59,7 +60,7 @@ You may customize the bookmark links from the extension preferences page.
 This purely cosmetic feature replaces the Bibliovation logo with a higher resolution image so that it looks less fuzzy on larger screens.
 
 ## Standardize patron record formatting
-All text fields of a patron's record are made uppercase except email addresses which are made lowercase. The city and state format for the City of Madison is made "MADISON WI", and library staff may enter "mad" as a shortcut for "MADISON WI".
+All text fields of a patron's record are made uppercase except email addresses which are made lowercase. The city and state format for the City of Madison is made "MADISON WI", and library staff may enter "mad" as a shortcut for "MADISON WI". If you forget to include the two character state code, " WI" will be automatically appended to the city.
 
 ## Sort item checkout history
 When viewing an item's checkout history, you may sort the table based on the checkout date, due date, or return date in ascending or descending order. You may also group the data by barcode number and/or only show a specific barcode.
@@ -98,9 +99,7 @@ This option adds additional canned messages frequently used by MPL staff:
 * "Email box is full; unable to send notices by email. Holds, if any, are suspended. Email was: "
 
 ## Restrict fields in patron records
-This feature disables many of the rarely used input fields which appear while editing a patron’s record. This encourages library staff to maintain a consistent system of data entry across patron accounts. This may be overridden to enable all input fields by checking the checkbox at the top of the patron edit page.
-
-If you are logged into Koha as one of the MPL libraries, this will even more greatly reduce the available input fields when creating a new web-use only account. Additionally, the address, PSTAT, and circulation note fields will be automatically filled in according to MPL and SCLS standards.
+This feature disables many of the rarely used input fields which appear while editing a patron’s record. This encourages library staff to maintain a consistent system of data entry across patron accounts. This may be overridden to enable all input fields by checking the checkbox at the top of the patron edit page. Web-use only accounts have a greater number of disabled fields.
 
 ## Sunday dropbox mode
 Automatically checks "Dropbox Mode" on Sundays. If enabled, unchecking the box for dropbox mode on Sundays will disable it for 3 minutes (unless manually enabled).
@@ -113,5 +112,3 @@ This web extension is developed by Lucas Schneider, a Library Page II at Madison
 
 # Disclaimer
 This extension has been vetted for security by SCLS, however, it is neither supported nor endorsed by PTFS/LibLime or SCLS. It is independently developed by Lucas Schneider, a Library Page at MPL-Central. Please use the extension only at the discretion of your circulation or departmental supervisor.
-
-  [1]: javascript:void(InstallTrigger.install({'MPL Koha Patch':'https://raw.githubusercontent.com/lucasschneider/mpl-bibex-firefox/master/releases/currXPI/mpl-bibex.xpi'}));

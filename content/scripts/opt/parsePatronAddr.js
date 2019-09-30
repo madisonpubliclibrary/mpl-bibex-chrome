@@ -86,18 +86,22 @@
 
     function deleteLUNotice() {
       chrome.storage.sync.get('addrNoteCooldown', res => {
-        if (res.hasOwnProperty('addrNoteCooldown') && !res.addrNoteCooldown) {
-          chrome.runtime.sendMessage({"key": "addrNoteCooldown"}, result => {
-
+        if ((res.hasOwnProperty('addrNoteCooldown') && !res.addrNoteCooldown) || !res.hasOwnProperty('addrNoteCooldown')) {
+          chrome.runtime.sendMessage({"key": "addrNoteCooldown"}, () => {
+            alert('Please delete the circulation note regarding the patron\'s pervious limited use address');
           });
-          alert('Please delete the circulation note regarding the patron\'s pervious limited use address');
         }
       });
-
     }
 
     function deleteDormNotice() {
-      alert('Please delete the circulation note regarding the patron\'s previous dorm address')
+      chrome.storage.sync.get('addrNoteCooldown', res => {
+        if ((res.hasOwnProperty('addrNoteCooldown') && !res.addrNoteCooldown) || !res.hasOwnProperty('addrNoteCooldown')) {
+          chrome.runtime.sendMessage({"key": "addrNoteCooldown"}, () => {
+            alert('Please delete the circulation note regarding the patron\'s previous dorm address');
+          });
+        }
+      });
     }
 
     var parseAddr = function() {
