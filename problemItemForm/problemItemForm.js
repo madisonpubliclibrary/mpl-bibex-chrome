@@ -139,6 +139,7 @@
         cCode.value = res.cCode;
         holds.value = res.holds;
         copies.value = res.copies;
+        if (res.hasOwnProperty('use')) use.value = res.use;
 
         if (res.hasOwnProperty('patronID')) {
           chrome.runtime.sendMessage({
