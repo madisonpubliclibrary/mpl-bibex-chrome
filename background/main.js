@@ -679,41 +679,92 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
       let useThisYear;
       let pastUse;
 
-      chrome.storage.sync.get('silentItemData', function(res) {
-        let isSilent = res.hasOwnProperty('silentItemData') ? res.silentItemData : false;
-        chrome.tabs.create({
-          "url": "https://lakscls-sandbox.bibliovation.com/app/search/" + message.itemBarcode,
-          "active": !isSilent
-        }, tab => {
-          const getBibNumListener = setInterval(() => {
-            chrome.tabs.executeScript(tab.id, {
-              "file": "/problemItemForm/getItemBib.js"
-            }, res => {
-              res = res[0];
-              if (res && res.hasOwnProperty('found') && res.found) {
-                clearInterval(getBibNumListener);
-                chrome.tabs.remove(tab.id);
-                chrome.tabs.create({
-                  "url": "https://lakscls-sandbox.bibliovation.com/app/staff/bib/" +
-                      res.bib + "/details" + "?mbxItemBC=" + message.itemBarcode,
-                  "active": !isSilent
-                }, tab => {
-                  const getItemData = setInterval(() => {
-                    chrome.tabs.executeScript(tab.id, {
-                       "file": "/problemItemForm/getItemTitleCopiesHolds.js"
-                    }, res => {
-                      if (res && res[0] && res[0].hasOwnProperty('found') && res[0].found) {
-                        clearInterval(getItemData);
-                        chrome.tabs.remove(tab.id);
-                        reply(res[0]);
-                      }
-                    });
-                  }, 650);
+      chrome.tabs.create({
+        "url": "https://lakscls-sandbox.bibliovation.com/app/search/" + message.itemBarcode,
+        "active": true
+      }, tab => {
+        const getBibNumListener = setInterval(() => {
+          chrome.tabs.executeScript(tab.id, {
+            "file": "/problemItemForm/getItemBib.js"
+          }, res => {
+            res = res[0];
+            if (res && res.hasOwnProperty('found') && res.found) {
+              clearInterval(getBibNumListener);
+              chrome.tabs.remove(tab.id);
+
+              chrome.storage.sync.get('getItemUse', usePref => {
+                let getItemTitleCopiesHolds = new Promise((resolve, reject) => {
+                  chrome.tabs.create({
+                    "url": "https://lakscls-sandbox.bibliovation.com/app/staff/bib/" +
+                        res.bib + "/details" + "?mbxItemBC=" + message.itemBarcode,
+                    "active": true
+                  }, tab => {
+                    const getItemData = setInterval(() => {
+                      chrome.tabs.executeScript(tab.id, {
+                         "file": "/problemItemForm/getItemTitleCopiesHolds.js"
+                      }, res => {
+                        if (res && res[0] && res[0].hasOwnProperty('found') && res[0].found) {
+                          clearInterval(getItemData);
+                          chrome.tabs.remove(tab.id);
+                          resolve(res[0]);
+                        }
+                      });
+                    }, 650);
+                  });
                 });
-              }
-            });
-          }, 650);
-        });
+
+                if (!usePref.hasOwnProperty('getItemUse') || (usePref.hasOwnProperty('getItemUse') && usePref.getItemUse)) {
+                  let getItemUse = new Promise((resolve, reject) => {
+                    chrome.tabs.create({
+                      "url": "https://lakscls-sandbox.bibliovation.com/app/staff/bib/" +
+                          res.bib + "/items/circstatus?mbxItemBC=" + message.itemBarcode,
+                      "active": true
+                    }, tab => {
+                      const waitForUse = setInterval(() => {
+                        chrome.tabs.executeScript(tab.id, {
+                          "file": "/problemItemForm/getItemUse.js"
+                        }, useData => {
+                          if (useData && useData[0] && useData[0].hasOwnProperty('found') && useData[0].found) {
+                            clearInterval(waitForUse);
+                            chrome.tabs.remove(tab.id);
+                            resolve(useData[0].use);
+                          }
+                        });
+                      }, 650);
+                    });
+                  });
+
+                  let getItemPastUse = new Promise((resolve, reject) => {
+                    chrome.tabs.create({
+                      "url": "https://lakscls-sandbox.bibliovation.com/app/staff/bib/" +
+                          res.bib + "/items?mbxItemBC=" + message.itemBarcode,
+                      "active": true
+                    }, tab => {
+                      const waitForPastUse = setInterval(() => {
+                        chrome.tabs.executeScript(tab.id, {
+                          "file": "/problemItemForm/getItemPastUse.js"
+                        }, pastUseData => {
+                          if (pastUseData && pastUseData[0] && pastUseData[0].hasOwnProperty('found') && pastUseData[0].found) {
+                            clearInterval(waitForPastUse);
+                            chrome.tabs.remove(tab.id);
+                            resolve(pastUseData[0].pastUse);
+                          }
+                        });
+                      }, 650);
+                    });
+                  });
+
+                  Promise.all([getItemTitleCopiesHolds, getItemUse, getItemPastUse]).then(res => {
+                    res[0].use = parseInt(res[1]) + parseInt(res[2]);
+                    reply(res[0]);
+                  });
+                } else {
+                  getItemTitleCopiesHolds.then(res => { reply(res); });
+                }
+              });
+            }
+          });
+        }, 650);
       });
       result = OPEN_CHANNEL;
       break;
