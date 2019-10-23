@@ -127,6 +127,7 @@ document.getElementById("setDefault").addEventListener('click', function() {
 skin.addEventListener('change', function() {
   chrome.storage.sync.set({"skin": skin.value}, function() {
     chrome.runtime.sendMessage({"key": "updateExtensionIcon"});
+    setTimeout(() => {restoreOptions()}, 500);
   });
 });
 document.getElementById("parseAddrSwitch").addEventListener('click', function() {

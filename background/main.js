@@ -1,4 +1,47 @@
 function setIcon() {
+  let defaultLinks = {
+    "MAD": {
+      "shortcutText4": "MPL Home Page",
+      "shortcutLink4": "http://madisonpubliclibrary.org",
+      "shortcutText5": "MPLnet",
+      "shortcutLink5": "http://www.mplnet.org",
+      "shortcutText6": "MPL Reference Tools",
+      "shortcutLink6": "http://www.madisonpubliclibrary.org/research/referenc2"
+    },
+    "MID": {
+      "shortcutText4": "MID Home Page",
+      "shortcutLink4": "https://www.midlibrary.org",
+      "shortcutText5": "MID Staff Page",
+      "shortcutLink5": "https://www.midlibrary.org/library/staff/login.asp",
+      "shortcutText6": "",
+      "shortcutLink6": ""
+    },
+    "SUN": {
+      "shortcutText4": "SUN Home Page",
+      "shortcutLink4": "https://www.sunprairiepubliclibrary.org",
+      "shortcutText5": "",
+      "shortcutLink5": "",
+      "shortcutText6": "",
+      "shortcutLink6": ""
+    },
+    "PCPL": {
+      "shortcutText4": "PCPL Home Page",
+      "shortcutLink4": "https://www.pocolibrary.org",
+      "shortcutText5": "",
+      "shortcutLink5": "",
+      "shortcutText6": "",
+      "shortcutLink6": ""
+    },
+    "SCLS": {
+      "shortcutText4": "SCLS Home Page",
+      "shortcutLink4": "https://www.scls.info",
+      "shortcutText5": "SCLS Login Page",
+      "shortcutLink5": "https://www.scls.info/user",
+      "shortcutText6": "",
+      "shortcutLink6": ""
+    }
+  };
+
   chrome.storage.sync.get('skin', function(res) {
     var skin = res.hasOwnProperty('skin') ? res.skin : 'MAD';
 
@@ -13,6 +56,8 @@ function setIcon() {
             "128": "/content/img/mid-icon-128.png"
           }
         });
+
+        browser.storage.sync.set(defaultLinks['MID']);
         break;
       case "PCPL":
         chrome.browserAction.setIcon({
@@ -24,6 +69,8 @@ function setIcon() {
             "128": "content/img/pcpl-icon-128.png"
           }
         });
+
+        browser.storage.sync.set(defaultLinks['PCPL']);
         break;
       case "SCLS":
         chrome.browserAction.setIcon({
@@ -35,6 +82,8 @@ function setIcon() {
             "128": "/content/img/scls-icon-128.png"
           }
         });
+
+        browser.storage.sync.set(defaultLinks['SCLS']);
         break;
       case "SUN":
         chrome.browserAction.setIcon({
@@ -46,6 +95,8 @@ function setIcon() {
             "128": "/content/img/sun-icon-128.png"
           }
         });
+
+        browser.storage.sync.set(defaultLinks['SUN']);
         break;
       default:
         chrome.browserAction.setIcon({
@@ -57,6 +108,8 @@ function setIcon() {
             "128": "/content/img/mpl-icon-128.png"
           }
         });
+
+        browser.storage.sync.set(defaultLinks['MAD']);
     }
   });
 };
