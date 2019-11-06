@@ -88,14 +88,11 @@
     /*** AUTOFILL OPAC LOGIN ***/
     if (cardNum != null) {
       cardNum.onblur = function() {
-        if (this != null) {
-    	  cardNum = this.value;
-          if (cardNum.length === 14 && cardNum.substr(0,5) === "29078") {
-            if (userId != null) {
-              userId.value = cardNum;
-            }
+        if (cardNum.value.length === 14 && cardNum.value.substr(0,5) === "29078") {
+          if (userId != null) {
+            userId.value = cardNum.value;
           }
-    	  }
+        }
       }
     }
   }

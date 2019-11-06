@@ -36,7 +36,6 @@
 
     if (libCode && libCode.length > 0) {
       libCode = libCode[0].textContent.substr(0,3).toUpperCase();
-      console.log(libCode);
     }
 
     if (itemTable && libCode && h1Elts && h1Elts.length > 0) {

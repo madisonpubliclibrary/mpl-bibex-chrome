@@ -15,11 +15,6 @@
     let month = date.getMonth();
     let staffInit;
 
-    // Set Adult as defualt patorn type
-    if (window.location.toString().includes("op=add") && cc) {
-      cc.value = "AD";
-    }
-
     if (month < 4) {
       year = date.getFullYear();
     } else if (month > 4) {

@@ -9,7 +9,7 @@
 
     const birthdayField = document.getElementById('dateofbirth');
     let birthday;
-    let patronCategory = document.getElementsByName('categorycode')[0];
+    let patronCategory = document.getElementById('categorycode');
     let saveButtonWrapper = document.getElementsByClassName('action')[0];
     let saveButton = document.getElementsByName('save')[0];
     const updateButton = document.createElement('input');
