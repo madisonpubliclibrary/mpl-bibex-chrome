@@ -1,6 +1,6 @@
 (function(){
   'use strict';
-  if (/bibliovation\.com\/app\/staff\/patron/.test(window.location)) {
+  if (/kohalibrary\.com\/app\/staff\/patron/.test(window.location)) {
     let patronInfo = document.getElementsByClassName('patroninfo');
 
     if (!document.getElementById('printBarcode') && patronInfo.length > 0) {

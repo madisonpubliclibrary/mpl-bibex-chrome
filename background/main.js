@@ -689,7 +689,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
       new Promise((resolve, reject) => {
         if (message.hasOwnProperty('patronBarcode')) {
           chrome.tabs.create({
-            "url": "https://lakscls-sandbox.bibliovation.com/cgi-bin/koha/members/member.pl?member=" +
+            "url": "https://scls.kohalibrary.com/cgi-bin/koha/members/member.pl?member=" +
                 message.patronBarcode,
             "active": false
           }, function(tab) {
@@ -711,7 +711,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
         }
       }).then(patronID => {
         chrome.tabs.create({
-          "url": "https://lakscls-sandbox.bibliovation.com/cgi-bin/koha/members/moremember.pl?borrowernumber=" +
+          "url": "https://scls.kohalibrary.com/cgi-bin/koha/members/moremember.pl?borrowernumber=" +
               patronID,
           "active": false
         }, function(tab) {
@@ -733,7 +733,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
       let pastUse;
 
       chrome.tabs.create({
-        "url": "https://lakscls-sandbox.bibliovation.com/app/search/" + message.itemBarcode,
+        "url": "https://scls.kohalibrary.com/app/search/" + message.itemBarcode,
         "active": true
       }, tab => {
         const getBibNumListener = setInterval(() => {
@@ -748,7 +748,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
               chrome.storage.sync.get('getItemUse', usePref => {
                 let getItemTitleCopiesHolds = new Promise((resolve, reject) => {
                   chrome.tabs.create({
-                    "url": "https://lakscls-sandbox.bibliovation.com/app/staff/bib/" +
+                    "url": "https://scls.kohalibrary.com/app/staff/bib/" +
                         res.bib + "/details" + "?mbxItemBC=" + message.itemBarcode,
                     "active": true
                   }, tab => {
@@ -769,7 +769,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
                 if (!usePref.hasOwnProperty('getItemUse') || (usePref.hasOwnProperty('getItemUse') && usePref.getItemUse)) {
                   let getItemUse = new Promise((resolve, reject) => {
                     chrome.tabs.create({
-                      "url": "https://lakscls-sandbox.bibliovation.com/app/staff/bib/" +
+                      "url": "https://scls.kohalibrary.com/app/staff/bib/" +
                           res.bib + "/items/circstatus?mbxItemBC=" + message.itemBarcode,
                       "active": true
                     }, tab => {
@@ -789,7 +789,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
 
                   let getItemPastUse = new Promise((resolve, reject) => {
                     chrome.tabs.create({
-                      "url": "https://lakscls-sandbox.bibliovation.com/app/staff/bib/" +
+                      "url": "https://scls.kohalibrary.com/app/staff/bib/" +
                           res.bib + "/items?mbxItemBC=" + message.itemBarcode,
                       "active": true
                     }, tab => {
