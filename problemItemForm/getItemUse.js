@@ -1,19 +1,20 @@
 (function() {
   'use strict'
-  const data = {"found": false};
+  return new Promise((resolve, reject) => {
+    let itemBC = location.search.match(/mbxItemBC=3[0-9]{13}/)[0].match(/3[0-9]{13}/)[0];
 
-  let itemBC = location.search.match(/mbxItemBC=3[0-9]{13}/)[0].match(/3[0-9]{13}/)[0];
+    let waitForItems = setInterval(() => {
+      let items = Array.from(document.querySelectorAll('h4.itemlabel'));
 
-  let items = Array.from(document.querySelectorAll('h4.itemlabel'));
-
-  if (items.length > 0 ) {
-    for (let item of items) {
-      if (item.textContent.includes(itemBC) &&
-          /^\d+$/.test(item.parentElement.parentElement.children[1].children[2].children[1].children[1].children[1].textContent.split(',')[0].trim())) {
-        data.found = true;
-        data.use = item.parentElement.parentElement.children[1].children[2].children[1].children[1].children[1].textContent.split(',')[0].trim();
+      if (items.length > 0 ) {
+        for (let item of items) {
+          if (item.textContent.includes(itemBC) &&
+              item.parentElement.parentElement.children[1].children[2].children[1].children[1].children[1].textContent.match(/YTD:\s+\d+/).length > 0) {
+            clearInterval(waitForItems);
+            resolve(item.parentElement.parentElement.children[1].children[2].children[1].children[1].children[1].textContent.match(/YTD:\s+\d+/)[0].match(/\d+/)[0]);
+          }
+        }
       }
-    }
-  }
-  return data;
+    }, 350);
+  });
 })();
