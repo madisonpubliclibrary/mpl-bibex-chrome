@@ -20,6 +20,9 @@ chrome.storage.sync.get(null, function (res)  {
   if (!res.hasOwnProperty('updateAccountType') || performReset) {
     chrome.storage.sync.set({"updateAccountType": true});
   }
+  if (!res.hasOwnProperty('mplInternetCards') || performReset) {
+    chrome.storage.sync.set({"mplInternetCards": false});
+  }
   if (!res.hasOwnProperty('addPatronNotes') || performReset) {
     chrome.storage.sync.set({"addPatronNotes": true});
   }

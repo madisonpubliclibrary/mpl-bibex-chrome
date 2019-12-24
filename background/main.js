@@ -57,7 +57,7 @@ function setIcon() {
           }
         });
 
-        browser.storage.sync.set(defaultLinks['MID']);
+        chrome.storage.sync.set(defaultLinks['MID']);
         break;
       case "PCPL":
         chrome.browserAction.setIcon({
@@ -70,7 +70,7 @@ function setIcon() {
           }
         });
 
-        browser.storage.sync.set(defaultLinks['PCPL']);
+        chrome.storage.sync.set(defaultLinks['PCPL']);
         break;
       case "SCLS":
         chrome.browserAction.setIcon({
@@ -83,7 +83,7 @@ function setIcon() {
           }
         });
 
-        browser.storage.sync.set(defaultLinks['SCLS']);
+        chrome.storage.sync.set(defaultLinks['SCLS']);
         break;
       case "SUN":
         chrome.browserAction.setIcon({
@@ -96,7 +96,7 @@ function setIcon() {
           }
         });
 
-        browser.storage.sync.set(defaultLinks['SUN']);
+        chrome.storage.sync.set(defaultLinks['SUN']);
         break;
       default:
         chrome.browserAction.setIcon({
@@ -109,7 +109,7 @@ function setIcon() {
           }
         });
 
-        browser.storage.sync.set(defaultLinks['MAD']);
+        chrome.storage.sync.set(defaultLinks['MAD']);
     }
   });
 };
@@ -272,6 +272,13 @@ chrome.webNavigation.onCompleted.addListener(details => {
           (res.hasOwnProperty('updateAccountType') && res.updateAccountType)) {
         chrome.tabs.executeScript(details.tabId, {
           "file": "/content/scripts/opt/updateAccountType.js",
+          "allFrames": true
+        });
+      }
+
+      if (res.hasOwnProperty('mplInternetCards') && res.mplInternetCards) {
+        chrome.tabs.executeScript(details.tabId, {
+          "file": "/content/scripts/opt/mplInternetCards.js",
           "allFrames": true
         });
       }
