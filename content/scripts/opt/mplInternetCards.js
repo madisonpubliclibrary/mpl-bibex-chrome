@@ -11,11 +11,11 @@
       const yesDebarred = document.getElementById('yesdebarred');
       const noDebarred = document.getElementById('nodebarred');
 
-      addr.value = "NA";
-      city.value = "MADISON WI";
-      zip.value = "00088";
-      pstat.value = "D-17.04";
-      circNote.value = "FOR INTERNET USE ONLY; NO CKO ALLOWED. jfk";
+      if (addr.value === '') addr.value = "NA";
+      if (city.value === '') city.value = "MADISON WI";
+      if (zip.value === '') zip.value = "00088";
+      if (pstat.value === '') pstat.value = "D-17.04";
+      if (circNote.value === '') circNote.value = "FOR INTERNET USE ONLY; NO CKO ALLOWED. jfk";
 
       if (yesDebarred && noDebarred) {
         yesDebarred.checked = true;
