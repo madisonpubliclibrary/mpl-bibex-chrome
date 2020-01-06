@@ -17,7 +17,7 @@
             }
           }
         }
-        reject('Item past use not found.')
+        resolve(0); // If no past use cell, resolve 0
       }
     }, 350);
   });

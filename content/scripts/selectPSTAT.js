@@ -1470,13 +1470,13 @@
     // Add event listeners to the primary address and city fields
     if (addrElt && addrEltAlt && cityElt && cityEltAlt) {
       addrElt.addEventListener('blur', function() {
-        if (addrElt.value && cityElt.value) {
+        if (addrElt.value && cityElt.value && addrElt.value !== 'NA') {
           queryPSTAT(false);
         }
       });
 
       cityElt.addEventListener('blur', function() {
-        if (addrElt.value && cityElt.value) {
+        if (addrElt.value && cityElt.value && addrElt.value !== 'NA') {
           queryPSTAT(false);
         }
       });

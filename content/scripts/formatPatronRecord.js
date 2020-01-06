@@ -34,7 +34,7 @@
       }
 
       // Remove commas, abbrviate Wisconsin, trim whitespace
-      this.value = this.value.replace(/,/, '').replace(/wisconsin/i,'WI')
+      this.value = this.value.replace(/,/, '').replace(/wisconsin$/i,'WI')
           .replace(/\s{2,}/g, ' ').trim();
 
       // Append WI to the state if it is not provided

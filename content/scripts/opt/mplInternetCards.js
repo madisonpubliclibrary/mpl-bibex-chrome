@@ -14,7 +14,7 @@
       if (addr.value === '') addr.value = "NA";
       if (city.value === '') city.value = "MADISON WI";
       if (zip.value === '') zip.value = "00088";
-      if (pstat.value === '') pstat.value = "D-17.04";
+      if (pstat.value === '' || pstat.value === 'D-X-MAD' || pstat.value === 'X-UND' || pstat.value === 'D-X-SUN') pstat.value = "D-17.04";
       if (circNote.value === '') circNote.value = "FOR INTERNET USE ONLY; NO CKO ALLOWED. jfk";
 
       if (yesDebarred && noDebarred) {
