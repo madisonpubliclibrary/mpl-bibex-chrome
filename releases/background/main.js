@@ -57,7 +57,7 @@ function setIcon() {
           }
         });
 
-        chrome.storage.sync.set(defaultLinks['MID']);
+        browser.storage.sync.set(defaultLinks['MID']);
         break;
       case "PCPL":
         chrome.browserAction.setIcon({
@@ -70,7 +70,7 @@ function setIcon() {
           }
         });
 
-        chrome.storage.sync.set(defaultLinks['PCPL']);
+        browser.storage.sync.set(defaultLinks['PCPL']);
         break;
       case "SCLS":
         chrome.browserAction.setIcon({
@@ -83,7 +83,7 @@ function setIcon() {
           }
         });
 
-        chrome.storage.sync.set(defaultLinks['SCLS']);
+        browser.storage.sync.set(defaultLinks['SCLS']);
         break;
       case "SUN":
         chrome.browserAction.setIcon({
@@ -96,7 +96,7 @@ function setIcon() {
           }
         });
 
-        chrome.storage.sync.set(defaultLinks['SUN']);
+        browser.storage.sync.set(defaultLinks['SUN']);
         break;
       default:
         chrome.browserAction.setIcon({
@@ -109,7 +109,7 @@ function setIcon() {
           }
         });
 
-        chrome.storage.sync.set(defaultLinks['MAD']);
+        browser.storage.sync.set(defaultLinks['MAD']);
     }
   });
 };
@@ -272,13 +272,6 @@ chrome.webNavigation.onCompleted.addListener(details => {
           (res.hasOwnProperty('updateAccountType') && res.updateAccountType)) {
         chrome.tabs.executeScript(details.tabId, {
           "file": "/content/scripts/opt/updateAccountType.js",
-          "allFrames": true
-        });
-      }
-
-      if (res.hasOwnProperty('mplInternetCards') && res.mplInternetCards) {
-        chrome.tabs.executeScript(details.tabId, {
-          "file": "/content/scripts/opt/mplInternetCards.js",
           "allFrames": true
         });
       }
@@ -488,10 +481,10 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
               return fetch(alderURL, {"method": "GET"}).then(response => {
                 return response.json();
               }).then(json => {
-                let value = "";
+                var value = "";
 
-                for (let i = 0; i < json.length; i++) {
-                  let regex = new RegExp(json[i].regex, "i");
+                for (var i = 0; i < json.length; i++) {
+                  var regex = new RegExp(json[i].regex, "i");
                   if (regex.test(matchAddr)) {
                     value = json[i].value;
                   }
@@ -543,7 +536,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
         for (var i = 0; i < json.length; i++) {
           var regex = new RegExp(json[i].regex, "i");
 
-          if (regex.test(message.address.replace(/\./g,''))) {
+          if (regex.test(message.address)) {
             value = json[i].value;
             zip = json[i].zip
             break;

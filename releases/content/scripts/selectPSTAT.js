@@ -1264,14 +1264,6 @@
       "__default__": "X-UND"
     };
 
-    this.madTracts = ["1","10","105.01","107.01","107.02","108","109.01","109.03",
-        "11.01","11.02","110","112","114.01","114.02","12","13",
-        "14.01","14.02","14.03","15.01","15.02","16.03","16.05","16.06","17.04",
-        "17.05","18.02","18.04","19","2.01","2.02","2.04","2.05","20","21","22",
-        "23.01","23.02","24.01","24.02","25","26.01","26.02","26.03","27","28",
-        "29","3","30.01","30.02","31","32","4.01","4.02","4.05","4.06","4.07",
-        "4.08","5.01","5.03","5.04","6","7","8","9.01","9.02"];
-
     /**
      * Passes the county and county subdivision arguments to PSTATS.find()
      * with an empty string for the census tractNotice
@@ -1291,7 +1283,7 @@
      */
     this.find = function(county, countySub, censusTract) {
       if (county === "Dane" && countySub === "Madison city") {
-        return censusTract && this.madTracts.includes(censusTract) ? "D-" + censusTract : "D-X-MAD";
+        return censusTract ? "D-" + censusTract : "D-X-MAD";
       } else {
         return this.data[county][countySub] || this.data[county].__default__ ||
             this.data.__default__;
@@ -1478,13 +1470,13 @@
     // Add event listeners to the primary address and city fields
     if (addrElt && addrEltAlt && cityElt && cityEltAlt) {
       addrElt.addEventListener('blur', function() {
-        if (addrElt.value && cityElt.value && addrElt.value !== 'NA') {
+        if (addrElt.value && cityElt.value) {
           queryPSTAT(false);
         }
       });
 
       cityElt.addEventListener('blur', function() {
-        if (addrElt.value && cityElt.value && addrElt.value !== 'NA') {
+        if (addrElt.value && cityElt.value) {
           queryPSTAT(false);
         }
       });
@@ -1548,13 +1540,8 @@
             selectList[0].value = pstats.find(result.county,result.countySub,result.censusTract);
           }
 
-          if (selectList[0].value === "D-X-MAD") {
-            pstatMsg.send(MSG_ERROR, "City of Madison Census Tract " + result.censusTract + " was found, but is not available in Bibliovation.", findAltPSTAT);
-            toggleGMapSearch(true);
-          } else if (selectList[0].value !== "D-X-SUN" && selectList[0].value !== "X-UND") {
-            pstatMsg.send(MSG_SUCCESS, "PSTAT Matched with: " + result.matchAddr, findAltPSTAT);
-            toggleGMapSearch(true);
-          }
+          pstatMsg.send(MSG_SUCCESS, "PSTAT Matched with: " + result.matchAddr, findAltPSTAT);
+          toggleGMapSearch(true);
         } else if (result.key === "failedCensusData") {
           selectList[0].value = "X-UND";
           initialRejectMsg = result.rejectMsg;
@@ -1580,7 +1567,7 @@
             } else if (result.key === "failedAlderDists") {
               pstatMsg.send(MSG_ERROR, "PSTAT Error: " + result.rejectMsg, findAltPSTAT);
 
-              if (selectList[0].value === "X-UND" || selectList[0].value === "D-X-SUN") {
+              if (selectList[0].value === "X-UND") {
                 openFactFinder.style.display = 'block';
                 if (findAltPSTAT) {
                   addrEltAlt.parentElement.appendChild(openFactFinder);

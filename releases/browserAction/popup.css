@@ -1,0 +1,103 @@
+body {
+  min-width: 300px;
+  font-size: 12pt;
+  color: #1c6677;
+}
+
+h1 {
+  margin: 0.25em 0;
+}
+
+a,
+label,
+a:visited,
+#defaultMenu > div {
+  cursor: pointer;
+  color: #1c6677;
+  text-decoration: none;
+}
+
+a:hover,
+#defaultMenu > div:hover {
+  color: #20b8da;
+}
+
+a,
+a:hover,
+a:active,
+a:focus {
+  outline: 0;
+}
+
+#prefWrapper {
+  background: #cedde6;
+  text-align: right;
+  padding: 2px 10px 2px 0;
+}
+
+#laptopButton {
+  margin: 1em 1em 0 1em;
+}
+
+.mainWrapper {
+  margin: 0 1em 1em 1em;
+}
+
+/* The switch - the box around the slider */
+.switch {
+ position: relative;
+ display: inline-block;
+ width: 30px;
+ height: 17px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+ opacity: 0;
+ width: 0;
+ height: 0;
+}
+
+/* The slider */
+.slider {
+ position: absolute;
+ cursor: pointer;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ background-color: #ccc;
+ -webkit-transition: .4s;
+ transition: .4s;
+ border-radius: 17px;
+}
+
+.slider:before {
+ position: absolute;
+ content: "";
+ height: 13px;
+ width: 13px;
+ left: 2px;
+ bottom: 2px;
+ background-color: white;
+ -webkit-transition: .4s;
+ transition: .4s;
+ border-radius: 50%;
+}
+
+input {
+  display: block;
+}
+
+input:checked + .slider {
+ background-color: #1c6677;
+}
+
+input:focus + .slider {
+ box-shadow: 0 0 1px #1c6677;
+}
+
+input:checked + .slider:before {
+ -webkit-transform: translateX(13px);
+ transform: translateX(13px);
+}

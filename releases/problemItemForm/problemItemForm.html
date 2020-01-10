@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="problemItemForm.css" />
+    <title>Problem Item Form</title>
+  </head>
+  <body>
+    <header>
+      <h1>Problem Item Form</h1>
+      <h2>Do not check in the item!!!</h2>
+    </header>
+    <h3>Routing Information</h3>
+    <section id="routingInfo">
+      <div>
+        <b>Route to:</b><span class="required">*</span>
+        <input list="libCodes" id="to" />
+        <datalist id="libCodes">
+          <option value="ACL">Adams County Library (ACL)</option>
+          <option value="BAR">Baraboo Library (BAR)</option>
+          <option value="BLV">Belleville Library (BLV)</option>
+          <option value="BER">Black Earth Library (BER)</option>
+          <option value="DCL">Bookmobile-Dane County Library (DCL)</option>
+          <option value="BRD">Brodhead Memorial Public Library (BRD)</option>
+          <option value="CIA">Cambria - Jane Morgan Library (CIA)</option>
+          <option value="CBR">Cambridge Library (CBR)</option>
+          <option value="CSP">Cross Plains Library (CSP)</option>
+          <option value="DFT">DeForest Library (DFT)</option>
+          <option value="DEE">Deerfield Library (DEE)</option>
+          <option value="FCH">Fitchburg Public Library (FCH)</option>
+          <option value="WID">Wisconsin Dells - Kilbourn Public Library (WID)</option>
+          <option value="LAV">LaValle Library (LAV)</option>
+          <option value="ARP">Lester Public Library of Arpin (ARP)</option>
+          <option value="ROM">Lester Public Library of Rome (ROM)</option>
+          <option value="LDI">Lodi Library (LDI)</option>
+          <option value="HPB">Madison PL-Ashman (HPB)</option>
+          <option value="MAD">Madison PL-Central (MAD)</option>
+          <option value="HAW">Madison PL-Hawthorne (HAW)</option>
+          <option value="LAK">Madison PL-Lakeview (LAK)</option>
+          <option value="MEA">Madison PL-Meadowridge (MEA)</option>
+          <option value="MSB">Madison PL-Monroe St (MSB)</option>
+          <option value="PIN">Madison PL-Pinney (PIN)</option>
+          <option value="SEQ">Madison PL-Sequoya (SEQ)</option>
+          <option value="SMB">Madison PL-So. Madison (SMB)</option>
+          <option value="MAR">Marshall Library (MAR)</option>
+          <option value="MAZ">Mazomanie Library (MAZ)</option>
+          <option value="MCF">McFarland - E.D. Locke Library (MCF)</option>
+          <option value="MID">Middleton Library (MID)</option>
+          <option value="MOO">Monona Library (MOO)</option>
+          <option value="MRO">Monroe PL-Green County (MRO)</option>
+          <option value="MTH">Mount Horeb Library (MTH)</option>
+          <option value="NEK">Nekoosa - Charles and JoAnn Lester Library (NEK)</option>
+          <option value="NGL">New Glarus Library (NGL)</option>
+          <option value="NOF">North Freedom Library (NOF)</option>
+          <option value="ORE">Oregon Library (ORE)</option>
+          <option value="ALM">PCPL-Almond branch (ALM)</option>
+          <option value="PLO">PCPL-Plover branch (PLO)</option>
+          <option value="ROS">PCPL-Rosholt branch (ROS)</option>
+          <option value="STP">PCPL-Stevens Point branch (STP)</option>
+          <option value="PAR">Pardeeville Library (PAR)</option>
+          <option value="PLA">Plain-Kraemer Library (PLA)</option>
+          <option value="POR">Portage Library (POR)</option>
+          <option value="POY">Poynette Library (POY)</option>
+          <option value="RAN">Randolph - Hutchinson Memorial Library (RAN)</option>
+          <option value="REE">Reedsburg Library (REE)</option>
+          <option value="RKS">Rock Springs Library (RKS)</option>
+          <option value="PDS">Ruth Culver Community Library (PDS)</option>
+          <option value="SCA">SCLS Headquarters (SCA)</option>
+          <option value="SKC">Sauk City Library (SKC)</option>
+          <option value="SGR">Spring Green Library (SGR)</option>
+          <option value="STO">Stoughton Library (STO)</option>
+          <option value="SUN">Sun Prairie Library (SUN)</option>
+          <option value="VER">Verona Public Library (VER)</option>
+          <option value="WAU">Waunakee Library (WAU)</option>
+          <option value="MCM">Wisconsin Rapids - McMillan Library (MCM)</option>
+          <option value="WYO">Wyocena Library (WYO)</option>
+          <option value="ZZZ">ZZZ-Authorized users only!</option>
+        </datalist>
+      </div>
+      <div>
+        <b>Date:</b><span class="required">*</span>
+        <input id="date" type="date" placeholder="MM/DD/YYYY or YYYY-MM-DD">
+      </div>
+      <div>
+        <b>From:</b><span class="required">*</span>
+        <input list="libCodes" name="from" id="from" />
+      </div>
+      <div>
+        <b>Staff Name:</b><span class="required">*</span>
+        <input id="staffInit" type="text">
+      </div>
+    </section>
+    <h3>Problem Details</h3>
+    <section>
+      <div>
+        <b>Select problem type:</b><span class="required">*</span><br>
+        <select id="problem">
+          <option value=""></option>
+          <option value="Damaged Item">Damaged Item</option>
+          <option value="Parts Missing">Parts Missing</option>
+          <option value="Defect Reported">Defect Reported</option>
+        </select>
+      </div>
+      <div>
+        <b>Problem identified and/or reported by:</b><span class="required">*</span><br>
+        <select id="idBy">
+          <option value=""></option>
+          <option value="Staff">Staff</option>
+          <option value="Patron">Patron</option>
+        </select>
+      </div>
+      <div>
+        <b>Item received via:</b><span class="required">*</span><br>
+        <select id="receivedBy">
+          <option value=""></option>
+          <option value="Counter/Book Drop">Counter/Book Drop</option>
+          <option value="Transit Return">Transit Return</option>
+          <option value="Transit Hold">Transit Hold</option>
+        </select>
+      </div>
+      <div>
+        <label id="ckiBySorterLabel" for="ckiBySorter"><input type="checkbox" id="ckiBySorter"> Item was checked in by an automatic sorter?</label>
+      </div>
+      <div>
+        <b>Details (please be specific):</b><span class="required">*</span><br>
+        <textarea id="details" rows="3" cols="50"></textarea>
+      </div>
+    </section>
+    <h3>Item Details</h3>
+    <section>
+      <div>
+        <b>Title:</b><span class="required">*</span>
+        <input id="itemTitle" type="text">
+      </div>
+      <div>
+        <b>Barcode:</b><span class="required">*</span>
+        <input id="itemBarcode" type="text" maxlength="14">
+        <button id="prepareItemData">Get Item Details</button>
+        <ul id="itemDataNote">
+          <li>Finding item use, enabled by default, adds ~8sec to the data searh time.</li>
+          <li>Finding item data will clear the patron data fields.</li>
+        </ul>
+      </div>
+      <fieldset class="optional">
+        <legend class="optionalLabel">Optional</legend>
+        <div>
+          <b>Collection Code:</b>
+          <input id="cCode" type="text">
+        </div>
+        <div>
+          <b>Holds:</b>
+          <input id="holds" type="text" placeholder="The # of holds">
+        </div>
+        <div>
+          <b>Copies:</b>
+          <input id="copies" type="text" placeholder="The # of available copies">
+        </div>
+        <div>
+          <b>Use:</b>
+          <input id="use" type="text" placeholder="The total # of circs">
+        </div>
+      </fieldset>
+    </section>
+    <h3>Patron Information</h3>
+    <section>
+      <div>
+        <b>Name:</b>
+        <input id="name" type="text">
+      </div>
+      <div>
+        <b>Patron Barcode:</b>
+        <input id="patronBarcode" type="text" maxlength="14">
+        <button id="getPatronData">Get patron data from barcode</button>
+      </div>
+      <fieldset class="optional">
+        <legend class="optionalLabel">Optional</legend>
+        <div>
+          <b>Phone Number:</b>
+          <input id="phone" type="tel">
+        </div>
+        <div>
+          <b>Email:</b>
+          <input id="email" type="email">
+        </div>
+      </fieldset>
+    </section>
+    <h3>Patron Notified?</h3>
+    <section>
+      <div>
+        <b>Date: </b><input id="dateNotified" type="date">
+      </div>
+      <div>
+        <b>By staff: </b><input id="notifiedBy" placeholder="Initials..." />
+      </div>
+      <div>
+        <b>Contacted via:</b><br>
+        <select id="contactedVia">
+          <option value="" selected=""></option>
+          <option value="In-Person/In-Library">In-Person/In-Library</option>
+          <option value="Phone">Phone</option>
+          <option value="Voice Message">Voice Message</option>
+          <option value="E-mail">E-mail</option>
+          <option value="Mail Notice">Mail Notice</option>
+          <option value="Did Not Contact">Did Not Contact</option>
+        </select>
+      </div>
+    </section>
+    <h3 id="printForm">Print Report</h3>
+    <h3 id="instructions" name="instructions" style="display: none;">Problem Item Procedures</h3>
+    <section id="nonDefectNonHold" class="instructions" style="display: none;">
+      <h4>Damaged Item or Parts Missing via Counter/Book Drop or Transit Return</h4>
+      <ol>
+        <li><b>Do not check item in!</b></li>
+        <li>Add a damaged or parts missing message to patron's checkout screen.</li>
+        <li>If parts missing, contact patron and retain item for 3 days, then proceed to step 4.</li>
+        <li>Route item and form to owning library for follow up, or follow local library procedure.</li>
+      </ol>
+    </section>
+    <section id="nonDefectHold" class="instructions" style="display: none;">
+      <h4>Damaged Item or Parts Missing via Transit Hold</h4>
+      <ol>
+        <li><b>Do not check item in!</b></li>
+        <li>Go into item record and select <b>Edit Holds</b></li>
+        <li>Change patron's hold priority from "In Transit" to 1 and click <b>Update Hold</b></li>
+        <li>Change <b>Other Item Status</b> on item screen to <b>Defect Reported</b>.</li>
+        <li>Route item and form to owning library for follow-up, or follow local library procedure.</li>
+      </ol>
+    </section>
+    </section>
+    <section id="defect" class="instructions" style="display: none;">
+      <h4>Defect Reported</h4>
+      <ol>
+        <li>After filling out the above information, check item in.</li>
+        <li>If a hold is activated, click <b>Ignore</b>.</li>
+        <li>Change <b>Other Item Status</b> to <b>Defect Reported</b>.</li>
+        <li>Route item with form to owning library, or follow local library procedure.</li>
+      </ol>
+    </section>
+    <script type="text/javascript" src="problemItemForm.js"></script>
+  </body>
+</html>

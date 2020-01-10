@@ -10,7 +10,7 @@
     let holdsData = document.querySelector('.holds-data').textContent.trim();
     let totalHolds = holdsData.match(/Holds:\d+ total/);
     if (totalHolds.length > 0) totalHolds = totalHolds[0].match(/\d+/)[0];
-    let copies = holdsData.match(/on\s+\d+ item/);
+    let copies = holdsData.match(/on\s+\d+ items/);
     if (copies.length > 0) copies = copies[0].match(/\d+/)[0];
 
     let itemBC = location.search.match(/mbxItemBC=3[0-9]{13}/)[0].match(/3[0-9]{13}/)[0];
