@@ -2,6 +2,7 @@ const paymentPlan = document.getElementById('paymentPlan');
 const lostcard = document.getElementById('lostCard');
 const altPSTAT = document.getElementById('PSTAT2');
 const problemItem = document.getElementById('problemItem');
+const noticeFormatter = document.getElementById('noticeFormatter');
 const shortcut1 = document.getElementById('shortcut1');
 const shortcut2 = document.getElementById('shortcut2');
 const shortcut3 = document.getElementById('shortcut3');
@@ -24,7 +25,15 @@ altPSTAT.addEventListener('click', function() {
 
 problemItem.addEventListener('click', function() {
   chrome.tabs.create({
-    "url": chrome.runtime.getURL("../problemItemForm/problemItemForm.html")
+    "url": chrome.runtime.getURL("../problemItemForm/problemItemForm.html"),
+    "active": true
+  });
+});
+
+noticeFormatter.addEventListener('click', function() {
+  chrome.tabs.create({
+    "url": chrome.runtime.getURL("../noticeFormatter/noticeFormatter.html"),
+    "active": true
   });
 });
 

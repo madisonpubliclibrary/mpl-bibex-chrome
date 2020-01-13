@@ -395,12 +395,18 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     if (info.selectionText) {
       openPIForm(info.selectionText);
     } else if (info.linkUrl) {
+      console.log(info.linkUrl);
       chrome.tabs.executeScript(tab.id, {
-        "code": "document.getElementById('staff-iframe').contentWindow.document.querySelector('a[href=\"" + info.linkUrl.split('bibliovation.com')[1] + "\"]').textContent;"
+        "code": "document.querySelectorAll('a[href=\"" + info.linkUrl.split('kohalibrary.com')[1] + "\"]')[1].textContent.trim();"
       }, function(res) {
-        res[0] = res[0].trim();
-        if(/^[23]\d{13}$/.test(res[0])) {
-          openPIForm(res[0]);
+        if (res.length > 0) {
+          res[0] = res[0].trim();
+          if(/^[23]\d{13}$/.test(res[0])) {
+            openPIForm(res[0]);
+          } else {
+            sendErrorMsg("ERROR: Failed to extract link text.");
+            return;
+          }
         } else {
           sendErrorMsg("ERROR: Failed to extract link text.");
           return;

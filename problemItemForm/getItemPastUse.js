@@ -1,24 +1,22 @@
 (function() {
   'use strict'
-  return new Promise((resolve, reject) => {
-    let itemBC = location.search.match(/mbxItemBC=3[0-9]{13}/)[0].match(/3[0-9]{13}/)[0];
+  const data = {"found": false};
 
-    let waitForItems = setInterval(() => {
-      let items = Array.from(document.querySelectorAll('.item-cell.barcode'));
+  let itemBC = location.search.match(/mbxItemBC=3[0-9]{13}/)[0].match(/3[0-9]{13}/)[0];
+  let items = Array.from(document.querySelectorAll('.item-cell.barcode'));
 
-      if (items.length > 0) {
-        clearInterval(waitForItems);
-        for (let item of items) {
-          if (item.textContent.includes(itemBC)) {
-            for (let col of item.parentElement.parentElement.parentElement.children) {
-              if (col.classList.contains('952.Z')) {
-                resolve(col.textContent.trim());
-              }
-            }
+  if (items.length > 0) {
+    for (let item of items) {
+      if (item.textContent.includes(itemBC)) {
+        data.found = true;
+        data.pastUse = 0;
+        for (let col of item.parentElement.parentElement.parentElement.children) {
+          if (col.classList.contains('952.Z')) {
+            data.pastUse = col.textContent.trim();
           }
         }
-        resolve(0); // If no past use cell, resolve 0
       }
-    }, 350);
-  });
+    }
+  }
+  return data;
 })();

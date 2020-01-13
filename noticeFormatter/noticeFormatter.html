@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>MPL Notice Formatter</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="noticeFormatter.css">
+  </head>
+  <body>
+    <div id="print"></div>
+    <div id="screen">
+      <h1>MPL Notice Formatter</h1>
+      <p>This tool may be used to format paper notices downloaded from Bibliovation so that they may be easily used with windowed envelopes and perforated paper.</p>
+      <ol>
+        <li>Download (don't print) a PDF of notices from Bibliovation</li>
+        <li>Highlight all of the text in the PDF from Bibliovation and paste it into the text field below</li>
+        <li>Click `Format & Print`</li>
+        <li>Print <strong>without</strong> headers or footers (available under 'print options' or 'more settings').</li>
+      </ol>
+      <textarea id="text"></textarea>
+      <button id="format">Format & Print</button>
+    </div>
+    <script src="noticeFormatter.js"></script>
+  </body>
+</html>

@@ -1265,8 +1265,8 @@
     };
 
     this.madTracts = ["1","10","105.01","107.01","107.02","108","109.01","109.03",
-        "11.01","11.02","110","112","114.01","114.02","12","13",
-        "14.01","14.02","14.03","15.01","15.02","16.03","16.05","16.06","17.04",
+        "11.01","11.02","110","112","114.01","114.02","12","13","14.01",
+        "14.02","14.03","15.01","15.02","16.03","16.04","16.05","16.06","17.04",
         "17.05","18.02","18.04","19","2.01","2.02","2.04","2.05","20","21","22",
         "23.01","23.02","24.01","24.02","25","26.01","26.02","26.03","27","28",
         "29","3","30.01","30.02","31","32","4.01","4.02","4.05","4.06","4.07",
@@ -1549,7 +1549,35 @@
           }
 
           if (selectList[0].value === "D-X-MAD") {
-            pstatMsg.send(MSG_ERROR, "City of Madison Census Tract " + result.censusTract + " was found, but is not available in Bibliovation.", findAltPSTAT);
+            const tempCensusTractMap = {
+              '3.01':'3',
+              '3.02':'3',
+              '4.09':'4.05',
+              '4.10':'4.05',
+              '5.05':'5.03',
+              '5.06':'5.03',
+              '14.05':'14.03',
+              '17.06':'17.05',
+              '17.07':'17.05',
+              '19.01': '19',
+              '19.02': '19',
+              '108.01': '108',
+              '109.05':'109.01',
+              '109.06':'109.01',
+              '112.01':'112',
+              '114.03':'114.01',
+              '114.06':'114.01',
+              '114.07':'114.01',
+              '114.04':'114.02',
+              '114.05':'114.02'
+            };
+
+            if (tempCensusTractMap.hasOwnProperty(result.censusTract)) {
+              selectList[0].value = "D-" + tempCensusTractMap[result.censusTract];
+              pstatMsg.send(MSG_SUCCESS, "City of Madison Census Tract " + result.censusTract + " was found, but " + tempCensusTractMap[result.censusTract] + " was selected in Bibliovation.", findAltPSTAT);
+            } else {
+              pstatMsg.send(MSG_ERROR, "City of Madison Census Tract " + result.censusTract + " was found, but is not available in Bibliovation. Please report to MAD-CIRC.", findAltPSTAT);
+            }
             toggleGMapSearch(true);
           } else if (selectList[0].value !== "D-X-SUN" && selectList[0].value !== "X-UND") {
             pstatMsg.send(MSG_SUCCESS, "PSTAT Matched with: " + result.matchAddr, findAltPSTAT);

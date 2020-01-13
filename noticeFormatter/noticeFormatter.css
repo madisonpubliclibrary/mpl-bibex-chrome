@@ -1,0 +1,23 @@
+#screen { display:block; }
+#print { display:none; }
+
+@media print {
+  #screen { display:none; }
+  #print { display:block; }
+}
+
+@page {
+  size: auto;
+  margin: 1in 1in 1in 1in;
+}
+
+body {
+  width: 800px;
+  margin: 0 auto;
+  font-size: 14pt;
+  font-family: sans-serif;
+}
+textarea {
+  width: 100%;
+  height: 500px;
+}
