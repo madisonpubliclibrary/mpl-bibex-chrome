@@ -68,12 +68,12 @@
       }
 
       /** Until SCLS can fix hold slip printing issue **/
-      while (surname.value.length < 5) {
+      while (surname.value.length > 1 && surname.value.length < 5) {
         surname.value += ' ';
       }
 
 
-      while (firstName.value.length < 4) {
+      while (firstName.value.length > 1 && firstName.value.length < 4) {
         firstName.value += ' ';
       }
       /*************************************************/
