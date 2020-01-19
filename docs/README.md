@@ -2,9 +2,9 @@
 
 | Current Version | Install on Google Chrome | Author |
 | :-------------: | :----------------------: | :----: |
-| <br>1.52         | <br>[Google Chrome](https://chrome.google.com/webstore/detail/mpl-bibliovation-extensio/gnnmpgibgchafbgmlabigjdkkndgooch) | Lucas Schneider<br>Library Page II<br>MPL–Central |
+| <br>1.53         | <br>[Google Chrome](https://chrome.google.com/webstore/detail/mpl-bibliovation-extensio/gnnmpgibgchafbgmlabigjdkkndgooch) | Lucas Schneider<br>Library Page II<br>MPL–Central |
 
-MPL BibEx is a WebExtension for Firefox (58+) that adds additional features to PTFS's Bibliovation Library Services Platform. BibEx is intended for use by member libraries of the South Central Library System, and, while not supported by SCLS, it is actively developed and maintained by Lucas Schneider, a Library Page II at MPL-Central.
+MPL BibEx is a WebExtension for Firefox (58+) and Google Chrome that adds additional features to LibLimes's Bibliovation Library Services Platform. BibEx is intended for use by member libraries of Wisconsin's South Central Library System, and, while not supported by SCLS, it has been vetted by them for security and is actively developed and maintained by Lucas Schneider, a Library Page II at MPL-Central.
 
 ## Table of Contents
 * [Inherent features of MPL BibEx](#inherent-features-of-mpl-bibex)
@@ -42,6 +42,8 @@ There are a number of tools and links that are accessible via the icon's dropdow
   <dd>When patron's have separate residential and mailing addresses, it is customary to enter the mailing address in the primary address fields, and their residential address in the alternate address fields. For statistical purposes, the "sort 1" (PSTAT) value should be based on the residential address and <b><i>not</i></b> the  mailing address. Since the PSTAT is normally automatically found using the primary address, this link is necessary to find the PSTAT when the mailing address and residential address are different. You must be currently editing a patron's record to use this tool.</dd>
   <dt>Add MPL Payment Plan Note:</dt>
   <dd>This link will automatically generate the note for setting up a Madison Public Library payment plan if you are currently editing a patron's record. A popup note will ask you to enter the initial balance on the patron's account, and the extension will fill in the rest.</dd>
+  <dt>Format Notices</dt>
+  <dd>Until libraries are able to edit their own template files in Bibliovation, this formatter will convert the default layout of downloaded PDFs into a format that will align the patron's name and address in a windowed envelope and allow for perforated paper to be used. Follow the instructions on the tab that opens when you click the link. Performance is best in Google Chrome.</dd>
 </dl>
 
 Currently, the default bookmark links available are as follows:
@@ -59,7 +61,7 @@ You may customize the bookmark links from the extension preferences page.
 This purely cosmetic feature replaces the Bibliovation logo with a higher resolution image so that it looks less fuzzy on larger screens.
 
 ## Standardize patron record formatting
-All text fields of a patron's record are made uppercase except email addresses which are made lowercase. The city and state format for the City of Madison is made "MADISON WI", and library staff may enter "mad" as a shortcut for "MADISON WI". If you forget to include the two character state code, " WI" will be automatically appended to the city.
+All text fields of a patron's record are made uppercase except email addresses which are made lowercase. A patron's OPAC login will be unaffected. The city and state format for the City of Madison is made "MADISON WI", and library staff may enter "mad" as a shortcut for "MADISON WI". If you forget to include the two character state code, " WI" will be automatically appended to the city. Until the name truncation bug is fixed, the minimal number of spaces will be added to a patron's surname and first name if they are less than 5 or less than 4 characters, respectively.
 
 ## Sort item checkout history
 When viewing an item's checkout history, you may sort the table based on the checkout date, due date, or return date in ascending or descending order. You may also group the data by barcode number and/or only show a specific barcode.
