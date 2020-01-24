@@ -21,8 +21,6 @@
       } else if (this.id !== 'userid') {
         this.value = this.value.toUpperCase().replace(/\s{2,}/g, ' ').trim();
       }
-
-      addSpacesForHolds();
     }
 
     /**
@@ -68,8 +66,6 @@
           initials.value = names[1][0].toUpperCase();
         }
       }
-      addSpacesForHolds();
-
       return false;
     }
 
