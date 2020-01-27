@@ -39,6 +39,11 @@
       this.value = this.value.replace(/,/, '').replace(/wisconsin$/i,'WI')
           .replace(/\s{2,}/g, ' ').trim();
 
+      // Add space before "WI" if there isn't one
+      if (/[^ ]wi$/i.test(this.value)) {
+        this.value = this.value.substring(0, this.value.length - 2) + ' WI';
+      }
+
       // Append WI to the state if it is not provided
       if (!/ [A-Z]{2}$/.test(this.value) && this.value !== '') {
         this.value += " WI";
