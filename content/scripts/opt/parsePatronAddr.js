@@ -159,8 +159,8 @@
                   restoreSave();
                 }
 
-                if (!(bn.value.includes("Patron's account is Limited Use due to temporary residence at "
-                    + item.name + ' (' + item.address + ')') && bn.value.includes(currDate()))) {
+                if (!bn.value.includes("Patron's account is Limited Use due to temporary residence at "
+                    + item.name + ' (' + item.address + ')')) {
                   if (item.type === "restricted") {
                     staffInit = prompt("--- NOTE ---\nA library card issued to " + item.address + " (" +item.name + ") must be LIMITED USE.\n\nIn order to have the limited use restrictions removed from their account, a patron must first provide proof that they are living at a valid residential address.\n\nFor more info refer to the list of unacceptable addresses on the staff wiki:\nhttp://www.mplnet.org/system/files/UNACCEPTABLE%20ADDRESSES.pdf\n\nIf this is a new address, enter your initials and library code to confirm: (e.g. LS/MAD)");
                   } else if (item.type === "unique") {
