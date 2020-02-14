@@ -170,7 +170,7 @@ var SCLSLibs = function() {
       //"ALB": "200+N+Water+St,+Albany,+WI+53502", ** NON LINK LIBRARY **
       "BRD": "1207+25th+St,+Brodhead,+WI+53520",
       "MRO": "925+16th+Ave,+Monroe,+WI+53566",
-      //"MNT": "512+E+Lake+Ave,+Monticello,+WI+53570", ** NON LINK LIBRARY **
+      "MNT": "512+E+Lake+Ave,+Monticello,+WI+53570",
       "NGL": "319+Second+St,+New+Glarus,+WI+53574"
     },
     "Portage": {
@@ -821,7 +821,11 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
                   });
 
                   Promise.all([getItemTitleCopiesHolds, getItemUse, getItemPastUse]).then(res => {
-                    res[0].use = parseInt(res[1]) + parseInt(res[2]);
+                    if (res[2].acqDate < new Date('2012')) {
+                      res[0].use = parseInt(res[1].ytd) + parseInt(res[2].pastUse);
+                    } else {
+                      res[0].use = parseInt(res[1].totalUse);
+                    }
                     reply(res[0]);
                   });
                 } else {

@@ -1,7 +1,7 @@
 chrome.storage.sync.get(null, function (res)  {
   // Increment the resetCounter to trigger the extension to restore defalt settings
   // next time it loads
-  let resetCounter = 0;
+  let resetCounter = 1;
   let performReset = false;
   if (!res.hasOwnProperty('resetCounter') || (res.hasOwnProperty('resetCounter') && parseInt(res.resetCounter) < resetCounter)) {
     chrome.storage.sync.set({"resetCounter": resetCounter});
@@ -79,8 +79,8 @@ chrome.storage.sync.get(null, function (res)  {
   }
   if (!res.hasOwnProperty('shortcutText3') || !res.hasOwnProperty('shortcutLink3') || performReset) {
     chrome.storage.sync.set({
-      "shortcutText3": "American Fact Finder",
-      "shortcutLink3": "http://factfinder.census.gov/faces/nav/jsf/pages/searchresults.xhtml?refresh=t"
+      "shortcutText3": "TIGERweb",
+      "shortcutLink3": "https://tigerweb.geo.census.gov/tigerweb/"
     });
   }
   if (!res.hasOwnProperty('shortcutText4') || !res.hasOwnProperty('shortcutLink4') || performReset) {

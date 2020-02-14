@@ -10,7 +10,8 @@
       if (item.textContent.includes(itemBC) &&
           item.parentElement.parentElement.children[1].children[2].children[1].children[1].children[1].textContent.match(/YTD:\s+\d+/).length > 0) {
         data.found = true;
-        data.use = item.parentElement.parentElement.children[1].children[2].children[1].children[1].children[1].textContent.match(/YTD:\s+\d+/)[0].match(/\d+/)[0];
+        data.totalUse = item.parentElement.parentElement.children[1].children[2].children[1].children[1].children[1].textContent.trim().match(/^\d+/)[0];
+        data.ytd = item.parentElement.parentElement.children[1].children[2].children[1].children[1].children[1].textContent.match(/YTD:\s+\d+/)[0].match(/\d+/)[0];
       }
     }
     return data;
