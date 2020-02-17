@@ -13,8 +13,6 @@
         for (let col of item.parentElement.parentElement.parentElement.children) {
           if (col.classList.contains('952.Z')) {
             data.pastUse = col.textContent.trim();
-          } else if (col.classList.contains('dateaccessioned')) {
-            data.acqDate = new Date(col.textContent.trim());
           }
         }
         break;

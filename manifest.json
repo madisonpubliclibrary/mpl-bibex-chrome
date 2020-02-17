@@ -2,9 +2,9 @@
   "manifest_version": 2,
   "name": "MPL Bibliovation Extension",
   "short_name": "MPL BibEx",
-  "version": "2.3",
+  "version": "2.4",
   "author": "Lucas Schneider",
-  "description": "PTFS Bibliovation modifications to benefit Wisconsin's South Central Library System",
+  "description": "MPL-BibEx provides additional tools for library staff of Wisconsin's South Central Library System using LibLime's Bibliovation ILS.",
   "homepage_url": "http://lrschneider.com/mpl-bibex-chrome",
 
   "incognito": "spanning",

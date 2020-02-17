@@ -1,4 +1,5 @@
 (function() {
+  'use strict';
   const data = {"found": false};
 
   let items = document.querySelectorAll('a .item-display-value');

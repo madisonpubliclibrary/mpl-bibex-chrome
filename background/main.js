@@ -395,7 +395,6 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     if (info.selectionText) {
       openPIForm(info.selectionText);
     } else if (info.linkUrl) {
-      console.log(info.linkUrl);
       chrome.tabs.executeScript(tab.id, {
         "code": "document.querySelectorAll('a[href=\"" + info.linkUrl.split('kohalibrary.com')[1] + "\"]')[1].textContent.trim();"
       }, function(res) {
@@ -585,21 +584,10 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
         }
       });
       break;
-    case "openFactFinder":
+    case "openTIGERweb":
       chrome.tabs.create({
-        "url": "https://factfinder.census.gov/faces/nav/jsf/pages/searchresults.xhtml",
+        "url": "https://tigerweb.geo.census.gov/tigerweb",
         "active": true
-      }, function(tab) {
-        chrome.tabs.executeScript(tab.id, {
-          "file": "/content/scripts/openFactFinder.js",
-          "allFrames": true
-        }, function() {
-          chrome.tabs.sendMessage(tab.id, {
-            "key": "addressData",
-            "address": message.address,
-            "city": message.city
-          });
-        });
       });
       break;
     case "findNearestLib":
@@ -793,7 +781,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
                           if (useData && useData[0] && useData[0].hasOwnProperty('found') && useData[0].found) {
                             clearInterval(waitForUse);
                             chrome.tabs.remove(tab.id);
-                            resolve(useData[0].use);
+                            resolve(useData[0]);
                           }
                         });
                       }, 650);
@@ -821,11 +809,17 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
                   });
 
                   Promise.all([getItemTitleCopiesHolds, getItemUse, getItemPastUse]).then(res => {
-                    if (res[2].acqDate < new Date('2012')) {
-                      res[0].use = parseInt(res[1].ytd) + parseInt(res[2].pastUse);
-                    } else {
-                      res[0].use = parseInt(res[1].totalUse);
-                    }
+                    console.log(res);
+                    /**
+                     * Presently, there is no way to calculate an item's exact total use in Bibliovation if
+                     * it was acquired before 2012. If the acquisition date is before 2012, item use should
+                     * be calculated by adding Dynix and Koha Past Use and the YTD. If the acquisition date
+                     * is after 2012, item use should use only the "total use" value.
+                     *
+                     * The most accurate use data will always be the larger of these two calculations, which
+                     * is what the extension  calculates below.
+                     */
+                    res[0].use = Math.max(parseInt(res[1].ytd) + parseInt(res[2]), parseInt(res[1].totalUse));
                     reply(res[0]);
                   });
                 } else {

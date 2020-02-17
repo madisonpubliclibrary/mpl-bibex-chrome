@@ -1376,7 +1376,7 @@
     const selectList = document.getElementsByName('sort1');
     const pstatNotice = document.createElement('div');
     const pstatNoticeAlt = document.createElement('div');
-    const openFactFinder = document.createElement('div');
+    const openTIGERweb = document.createElement('div');
     const nearestLib = document.createElement('div');
     const mapRegionList = document.createElement('select');
     const gmapResponse = document.createElement('div');
@@ -1493,16 +1493,16 @@
       // Style the notification elements
       pstatNotice.id = "pstatNotice";
       pstatNoticeAlt.id = "pstatNoticeAlt";
-      openFactFinder.id = "openFactFinder";
-      openFactFinder.textContent = "Click to search American Fact Finder";
+      openTIGERweb.id = "openTIGERweb";
+      openTIGERweb.textContent = "Click to open TIGERweb";
       pstatNotice.setAttribute('style', 'margin-top:.5em;margin-left:118px;font-size:1.25em;font-weight:bold;font-style:italic;display:none;');
       pstatNoticeAlt.setAttribute('style', 'margin-top:.5em;margin-left:118px;font-size:1.25em;font-weight:bold;font-style:italic;display:none;');
-      openFactFinder.setAttribute('style', 'margin-top:.5em;margin-left:118px;font-size:1.25em;font-weight:bold;font-style:italic;color:' +
+      openTIGERweb.setAttribute('style', 'margin-top:.5em;margin-left:118px;font-size:1.25em;font-weight:bold;font-style:italic;color:' +
           MSG_SEARCHING + ';cursor:pointer;display:none;');
 
-      openFactFinder.addEventListener('click', function() {
+      openTIGERweb.addEventListener('click', function() {
         chrome.runtime.sendMessage({
-          "key": "openFactFinder",
+          "key": "openTIGERweb",
           "address": cleanAddr(targetAddr, false),
           "city": getCity(targetCity, false)
         });
@@ -1514,10 +1514,10 @@
     }
 
     /**
-     * Queries the US Census Geocoder, American Fact Finder, and a database of
-     * PSTAT exceptions and aldermanic districts to determine the proper "sort 1"
-     * code for a patron's record.
-     *
+    * Queries the US Census Geocoder and a database of PSTAT exceptions and
+    * aldermanic districts to determine the proper "sort 1" code for a
+    * patron's record.
+    *
      * @param {boolean} findAltPSTAT Whether the the query should use the patron's
      *   primary or alternate address
      */
@@ -1529,7 +1529,7 @@
       targetZip = findAltPSTAT ? zipEltAlt : zipElt;
 
       lnBrk.style.display = 'none';
-      openFactFinder.style.display = 'none';
+      openTIGERweb.style.display = 'none';
       gmapResponse.style.display = 'none';
       toggleGMapSearch(false);
       pstatMsg.send(MSG_SEARCHING, "Finding PSTAT...", findAltPSTAT);
@@ -1589,11 +1589,11 @@
               pstatMsg.send(MSG_ERROR, "PSTAT Error: " + result.rejectMsg, findAltPSTAT);
 
               if (selectList[0].value === "X-UND" || selectList[0].value === "D-X-SUN") {
-                openFactFinder.style.display = 'block';
+                openTIGERweb.style.display = 'block';
                 if (findAltPSTAT) {
-                  addrEltAlt.parentElement.appendChild(openFactFinder);
+                  addrEltAlt.parentElement.appendChild(openTIGERweb);
                 } else {
-                  addrElt.parentElement.appendChild(openFactFinder);
+                  addrElt.parentElement.appendChild(openTIGERweb);
                 }
               }
             }
