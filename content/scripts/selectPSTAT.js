@@ -1543,7 +1543,15 @@
         if (result.key === "returnCensusData") {
           targetZip.value = result.zip;
 
-          if (result.value) {
+          // [Feb 2020] The census geocoder has been assigning 4600 University Ave
+          // to the city of Madison, when it should actually be Shorewood Hills. The
+          // geocoder also has been returning W Wash data for 630 E Washington Ave.
+          if (/^4600 university av/i.test(targetAddr.value)) {
+            selectList[0].value = 'D-SH-V';
+          } else if (/^630 e(ast)? washington av/i.test(targetAddr.value)) {
+            selectList[0].value = 'D-18.02';
+            result.matchAddr = "630 E WASHINGTON AVE";
+          } else if (result.value) {
             selectList[0].value = result.value;
           } else {
             selectList[0].value = pstats.find(result.county,result.countySub,result.censusTract);
@@ -1586,14 +1594,50 @@
                   findAltPSTAT);
               toggleGMapSearch(true);
             } else if (result.key === "failedAlderDists") {
-              pstatMsg.send(MSG_ERROR, "PSTAT Error: " + result.rejectMsg, findAltPSTAT);
+              if (/madison|middleton|verona|monona|fitchburg/i.test(targetCity.value)) {
+                initialRejectMsg = result.error;
+                chrome.runtime.sendMessage({
+                  "key": "queryAlderDists",
+                  "address": targetAddr.value,
+                  "code": "exception"
+                }, function(res) {
+                  if (res.key === "returnAlderDists") {
+                    if (res.value) {
+                      selectList[0].value = res.value;
+                    }
 
-              if (selectList[0].value === "X-UND" || selectList[0].value === "D-X-SUN") {
-                openTIGERweb.style.display = 'block';
-                if (findAltPSTAT) {
-                  addrEltAlt.parentElement.appendChild(openTIGERweb);
-                } else {
-                  addrElt.parentElement.appendChild(openTIGERweb);
+                    if (res.zip) {
+                      targetZip.value = res.zip;
+                    }
+
+                    pstatMsg.send(MSG_SUCCESS,
+                        "PSTAT Matched with: " + decodeURI(targetAddr.value).toUpperCase(),
+                        findAltPSTAT);
+                    toggleGMapSearch(true);
+                  } else if (res.key === "failedExceptions") {
+                    initialRejectMsg = res.error;
+                    pstatMsg.send(MSG_ERROR, "[PSTAT] " + initialRejectMsg, findAltPSTAT);
+
+                    if (selectList[0].value === "X-UND" || selectList[0].value === "D-X-SUN") {
+                      openTIGERweb.style.display = 'block';
+                      if (findAltPSTAT) {
+                        addrEltAlt.parentElement.appendChild(openTIGERweb);
+                      } else {
+                        addrElt.parentElement.appendChild(openTIGERweb);
+                      }
+                    }
+                  }
+                });
+              } else {
+                pstatMsg.send(MSG_ERROR, "[PSTAT] " + initialRejectMsg, findAltPSTAT);
+
+                if (selectList[0].value === "X-UND" || selectList[0].value === "D-X-SUN") {
+                  openTIGERweb.style.display = 'block';
+                  if (findAltPSTAT) {
+                    addrEltAlt.parentElement.appendChild(openTIGERweb);
+                  } else {
+                    addrElt.parentElement.appendChild(openTIGERweb);
+                  }
                 }
               }
             }

@@ -567,7 +567,17 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
             "value": value
           });
         } else {
-          reply({"key": "failedAlderDists"});
+          if (message.code === "exception") {
+            reply({
+              "key": "failedExceptions",
+              "error": "Address not found in database of PSTAT exceptions."
+            });
+          } else {
+            reply({
+              "key": "failedAlderDists",
+              "error": "Address not found in database of aldermanic districts."
+            });
+          }
         }
       });
       result = OPEN_CHANNEL;
