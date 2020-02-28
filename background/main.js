@@ -39,6 +39,14 @@ function setIcon() {
       "shortcutLink5": "https://www.scls.info/user",
       "shortcutText6": "",
       "shortcutLink6": ""
+    },
+    "STO": {
+      "shortcutText4": "STO Home Page",
+      "shortcutLink4": "https://www.stoughtonpubliclibrary.org",
+      "shortcutText5": "",
+      "shortcutLink5": "",
+      "shortcutText6": "",
+      "shortcutLink6": ""
     }
   };
 
@@ -84,6 +92,19 @@ function setIcon() {
         });
 
         chrome.storage.sync.set(defaultLinks['SCLS']);
+        break;
+      case "STO":
+        chrome.browserAction.setIcon({
+          "path": {
+            "16": "/content/img/sto-icon-16.png",
+            "32": "/content/img/sto-icon-32.png",
+            "48": "/content/img/sto-icon-48.png",
+            "64": "/content/img/sto-icon-64.png",
+            "128": "/content/img/sto-icon-128.png"
+          }
+        });
+
+        chrome.storage.sync.set(defaultLinks['STO']);
         break;
       case "SUN":
         chrome.browserAction.setIcon({
