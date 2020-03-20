@@ -52,7 +52,7 @@
     "*://*.kohalibrary.com/*",
     "*://*.census.gov/*",
     "*://*.googleapis.com/*",
-    "*://mpl-bibex.lrschneider.com/*"
+    "https://spreadsheets.google.com/feeds/list/1ftLNpSrnF0n_YDfR9Sj3Pk-upxsLIxE6Ptzoo20cxG4/*"
   ],
 
   "web_accessible_resources": [

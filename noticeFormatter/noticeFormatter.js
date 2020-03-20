@@ -4,7 +4,7 @@
     let format = document.getElementById('format');
     let print = document.getElementById('print');
 
-    print.innerHTML = text.value.replace(/(\d{3}-\d{3}-\d{4})|Dream Bus/g, (i => m => !i++ ? "<div>" + m : "<div style=\"page-break-before: always\">" + m)(0)) // All notices
+    print.innerHTML = text.value.replace(/(?:\d{3}-\d{3}-\d{4})|Dream Bus/g, (i => m => !i++ ? "<div>" + m : "<div style=\"page-break-before: always\">" + m)(0)) // All notices
                                 .replace(/[A-Z][a-z][a-zA-Z' ]+,? WI( \d{5}(-\d{4})?)?/g, "$&</div>\n\n") // All notices
                                 .replace(/Dear /g, "\n\n\n\n\n\n$&") // Hold notices
                                 .replace(/These items are/g, "\n\n$&") // Hold notices

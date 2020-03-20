@@ -106,12 +106,12 @@
         }, function(result) {
           for (let item of result) {
             var fullAddr = (addr.value + ' ' + addr2.value).trim().replace(/[^\w\s]|_/g, "");
-            var regex = new RegExp('^' + item.regex, 'i');
+            var regex = new RegExp(item['gsx$regex']['$t'], 'i');
 
             if (regex.test(fullAddr)) {
-              if (item.type === "dorm") {
+              if (item['gsx$type']['$t'] === "dorm") {
                 let noteBody = "Special expiration date of 05/15/" + year +
-                    " set due to residence at " + item.name + ", a university dorm." +
+                    " set due to residence at " + item['gsx$name']['$t'] + ", a university dorm." +
                     " Patron must verbally update address before account renewal (proof of address not necessary).",
                   msg = noteBody;
 
@@ -128,13 +128,13 @@
                   bn.value += noteBody;
                 }
                 return;
-              } else if (item.type === "unacceptable") {
+              } else if (item['gsx$type']['$t'] === "unacceptable") {
                 if (patronActions[0].children[0].value !== "Override Block") {
-                  alert("--- STOP ---\nA library card CANNOT be issued to this address.\n" + item.address + " (" + item.name + ") is NOT a valid residential address.\n\nInform any patron providing this address that they must provide proof of a valid residential address in order to get a library card. (You could offer them an internet access card.)\n\nFor more info refer to the list of unacceptable addresses on the staff wiki:\nhttp://www.mplnet.org/system/files/UNACCEPTABLE%20ADDRESSES.pdf");
+                  alert("--- STOP ---\nA library card CANNOT be issued to this address.\n" + item['gsx$address']['$t'] + " (" + item['gsx$name']['$t'] + ") is NOT a valid residential address.\n\nInform any patron providing this address that they must provide proof of a valid residential address in order to get a library card. (You could offer them an internet access card.)\n\nFor more info refer to the list of unacceptable addresses on the staff wiki:\nhttp://www.mplnet.org/system/files/UNACCEPTABLE%20ADDRESSES.pdf");
                   blockSubmit();
                 }
                 return;
-              } else if (item.type === "restricted" || item.type === "unique") {
+              } else if (item['gsx$type']['$t'] === "restricted" || item['gsx$type']['$t'] === "unique") {
                 // Make account limited use
                 if (cc) {
                   if (cc.value === "AD") {
@@ -160,17 +160,17 @@
                 }
 
                 if (!bn.value.includes("Patron's account is Limited Use due to temporary residence at "
-                    + item.name + ' (' + item.address + ')')) {
-                  if (item.type === "restricted") {
-                    staffInit = prompt("--- NOTE ---\nA library card issued to " + item.address + " (" +item.name + ") must be LIMITED USE.\n\nIn order to have the limited use restrictions removed from their account, a patron must first provide proof that they are living at a valid residential address.\n\nFor more info refer to the list of unacceptable addresses on the staff wiki:\nhttp://www.mplnet.org/system/files/UNACCEPTABLE%20ADDRESSES.pdf\n\nIf this is a new address, enter your initials and library code to confirm: (e.g. LS/MAD)");
-                  } else if (item.type === "unique") {
-                    staffInit = prompt(item.note.replace(/\\n/g, "\n"));
+                    + item['gsx$name']['$t'] + ' (' + item['gsx$address']['$t'] + ')')) {
+                  if (item['gsx$type']['$t'] === "restricted") {
+                    staffInit = prompt("--- NOTE ---\nA library card issued to " + item['gsx$address']['$t'] + " (" +item['gsx$name']['$t'] + ") must be LIMITED USE.\n\nIn order to have the limited use restrictions removed from their account, a patron must first provide proof that they are living at a valid residential address.\n\nFor more info refer to the list of unacceptable addresses on the staff wiki:\nhttp://www.mplnet.org/system/files/UNACCEPTABLE%20ADDRESSES.pdf\n\nIf this is a new address, enter your initials and library code to confirm: (e.g. LS/MAD)");
+                  } else if (item['gsx$type']['$t'] === "unique") {
+                    staffInit = prompt(item['gsx$note']['$t'].replace(/\\n/g, "\n"));
                   }
 
                   if (!staffInit) staffInit = "";
                   if (bn.value !== '') bn.value += "\n\n";
 
-                  bn.value += "Patron's account is Limited Use due to temporary residence at " + item.name + " (" + item.address + "). Patron must show proof of valid residential address in order to remove restrictions. " + currDate() + " " + staffInit;
+                  bn.value += "Patron's account is Limited Use due to temporary residence at " + item['gsx$name']['$t'] + " (" + item['gsx$address']['$t'] + "). Patron must show proof of valid residential address in order to remove restrictions. " + currDate() + " " + staffInit;
                 }
 
                 if (bn.value.match(/Patron's account is Limited Use due to temporary residence/g).length > 1) {
