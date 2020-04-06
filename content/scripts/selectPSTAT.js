@@ -1546,7 +1546,11 @@
           // [Feb 2020] The census geocoder has been assigning 4600 University Ave
           // to the city of Madison, when it should actually be Shorewood Hills. The
           // geocoder also has been returning W Wash data for 630 E Washington Ave.
-          if (/^46[01]0 university av/i.test(targetAddr.value)) {
+          if (/^2051 allen b/i.test(targetAddr.value)) {
+            selectList[0].value = 'D-MID-C4';
+          } else if (/^100 wisconsin av/i.test(targetAddr.value)) {
+            selectList[0].value = 'D-17.04';
+          } else if (/^46[01]0 university av/i.test(targetAddr.value)) {
             selectList[0].value = 'D-SH-V';
           } else if (/^630 e(ast)? washington av/i.test(targetAddr.value)) {
             selectList[0].value = 'D-18.02';
