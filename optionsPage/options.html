@@ -78,17 +78,13 @@
       </div>
       <div class="option">
         <h1>Update Account Type</h1>
-        <table>
-          <tr>
-            <td>
-              <label class="switch" id="updateAccountTypeSwitch">
-                <input type="checkbox" id="updateAccountType">
-                <span class="slider"></span>
-              </label>
-            </td>
-            <td><label for="updateAccountType">Update JU ➞ AD and LUJ ➞ LU when saving a patron record if the patron is 16 years or older</label></td>
-          </tr>
-        </table>
+        <span style="font-weight:bold;">Select minimuum age for AD (Adult) patron type: </span>
+        <select id="adultAge">
+          <option value="16">16</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+        </select>
+        <p>Update JU ➞ AD and LUJ ➞ LU when saving a patron record if the patron is the age specified above or older.</p>
       </div>
       <div class="option">
         <h1>MPL Internet Cards</h1>

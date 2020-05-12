@@ -2,7 +2,7 @@ const skin = document.getElementById("skin");
 const parseAddr = document.getElementById("parseAddr");
 const restrictPatronFields = document.getElementById("restrictPatronFields");
 const addPatronNotes = document.getElementById("addPatronNotes");
-const updateAccountType = document.getElementById("updateAccountType");
+const adultAge = document.getElementById("adultAge");
 const mplInternetCards = document.getElementById("mplInternetCards");
 const avAndOther = document.getElementById("avAndOther");
 const cassette = document.getElementById("cassette");
@@ -37,7 +37,7 @@ function restoreOptions() {
     skin.value = res.skin;
     parseAddr.checked = res.parseAddr;
     restrictPatronFields.checked = res.restrictPatronFields;
-    updateAccountType.checked = res.updateAccountType;
+    adultAge.value = res.adultAge;
     mplInternetCards.checked = res.mplInternetCards;
     addPatronNotes.checked = res.addPatronNotes;
     sepAllAV.checked = res.sepAllAV;
@@ -91,7 +91,7 @@ document.getElementById("setDefault").addEventListener('click', function() {
     "parseAddr": true,
     "restrictPatronFields": true,
     "dueDateToggle": true,
-    "updateAccountType": true,
+    "adultAge": "16",
     "mplInternetCards": false,
     "addPatronNotes": true,
     "sepAllAV": false,
@@ -139,8 +139,8 @@ document.getElementById("parseAddrSwitch").addEventListener('click', function() 
 document.getElementById("restrictPatronFieldsSwitch").addEventListener('click', function() {
   chrome.storage.sync.set({"restrictPatronFields": restrictPatronFields.checked});
 });
-document.getElementById("updateAccountTypeSwitch").addEventListener('click', function() {
-  chrome.storage.sync.set({"updateAccountType": updateAccountType.checked});
+adultAge.addEventListener('change', function() {
+  chrome.storage.sync.set({"adultAge": adultAge.value});
 });
 document.getElementById("mplInternetCardsSwitch").addEventListener('click', function() {
   chrome.storage.sync.set({"mplInternetCards": mplInternetCards.checked});

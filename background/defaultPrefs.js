@@ -17,8 +17,8 @@ chrome.storage.sync.get(null, function (res)  {
   if (!res.hasOwnProperty('restrictPatronFields') || performReset) {
     chrome.storage.sync.set({"restrictPatronFields": true});
   }
-  if (!res.hasOwnProperty('updateAccountType') || performReset) {
-    chrome.storage.sync.set({"updateAccountType": true});
+  if (!res.hasOwnProperty('adultAge') || performReset) {
+    chrome.storage.sync.set({"adultAge": "16"});
   }
   if (!res.hasOwnProperty('mplInternetCards') || performReset) {
     chrome.storage.sync.set({"mplInternetCards": false});

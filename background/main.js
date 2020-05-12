@@ -289,14 +289,6 @@ chrome.webNavigation.onCompleted.addListener(details => {
         });
       }
 
-      if (!res.hasOwnProperty('updateAccountType') ||
-          (res.hasOwnProperty('updateAccountType') && res.updateAccountType)) {
-        chrome.tabs.executeScript(details.tabId, {
-          "file": "/content/scripts/opt/updateAccountType.js",
-          "allFrames": true
-        });
-      }
-
       if (res.hasOwnProperty('mplInternetCards') && res.mplInternetCards) {
         chrome.tabs.executeScript(details.tabId, {
           "file": "/content/scripts/opt/mplInternetCards.js",
@@ -340,6 +332,11 @@ chrome.webNavigation.onCompleted.addListener(details => {
 
   chrome.tabs.executeScript(details.tabId, {
     "file": "/content/scripts/formatPatronRecord.js",
+    "allFrames": true
+  });
+
+  chrome.tabs.executeScript(details.tabId, {
+    "file": "/content/scripts/updateAccountType.js",
     "allFrames": true
   });
 
