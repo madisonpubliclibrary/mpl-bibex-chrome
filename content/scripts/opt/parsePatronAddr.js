@@ -99,16 +99,17 @@
       });
     }
 
-    var parseAddr = function() {
+    let parseAddr = function() {
       if (addr.value && city.value) {
         chrome.runtime.sendMessage({
           "key": "parsePatronAddr"
         }, function(result) {
           for (let item of result) {
-            var fullAddr = (addr.value + ' ' + addr2.value).trim().replace(/[^\w\s]|_/g, "");
-            var regex = new RegExp(item['gsx$regex']['$t'], 'i');
+            let fullAddr = (addr.value + ' ' + addr2.value).trim().replace(/[^\w\s]|_/g, "");
+            let regex = new RegExp(item['gsx$regex']['$t'], 'i');
+            let cityMatch = (new RegExp(item['gsx$city']['$t'], 'i')).test(city.value);
 
-            if (regex.test(fullAddr)) {
+            if (regex.test(fullAddr) && cityMatch) {
               if (item['gsx$type']['$t'] === "dorm") {
                 let noteBody = "Special expiration date of 05/15/" + year +
                     " set due to residence at " + item['gsx$name']['$t'] + ", a university dorm." +
@@ -130,7 +131,11 @@
                 return;
               } else if (item['gsx$type']['$t'] === "unacceptable") {
                 if (patronActions[0].children[0].value !== "Override Block") {
-                  alert("--- STOP ---\nA library card CANNOT be issued to this address.\n" + item['gsx$address']['$t'] + " (" + item['gsx$name']['$t'] + ") is NOT a valid residential address.\n\nInform any patron providing this address that they must provide proof of a valid residential address in order to get a library card. (You could offer them an internet access card.)\n\nFor more info refer to the list of unacceptable addresses on the staff wiki:\nhttp://www.mplnet.org/system/files/UNACCEPTABLE%20ADDRESSES.pdf");
+                  let msg = "--- STOP ---\nA library card CANNOT be issued to this address.\n" + item['gsx$address']['$t'] + " (" + item['gsx$name']['$t'] + ") is NOT a valid residential address.\n\nInform any patron providing this address that they must provide proof of a valid residential address in order to get a library card. (You could offer them an internet access card.)";
+                  if (item['gsx$city']['$t'] === 'madison') {
+                    msg += "\n\nFor more info refer to the list of unacceptable addresses on the staff wiki:\nhttps://www.mplnet.org/wiki/bad-addresseslimited-use-addresses";
+                  }
+                  alert(msg);
                   blockSubmit();
                 }
                 return;
@@ -145,11 +150,16 @@
                     if (dob && dob.value !== '') {
                       dob = new Date(dob.value);
 
-                      if (((Date.now() - dob)/31556952000) >= 16) {
-                        cc.value = "LU";
-                      } else {
-                        cc.value = "LUJ"
-                      }
+                      chrome.storage.sync.get('adultAge', function(res) {
+                        let ageAD = res.hasOwnProperty('adultAge') && /^1[6-8]$/.test(res.adultAge) ?
+                                  parseInt(res.adultAge) : 16;
+
+                        if (((Date.now() - dob)/31556952000) >= ageAD) {
+                          cc.value = "LU";
+                        } else {
+                          cc.value = "LUJ"
+                        }
+                      });
                     }
                   }
                 }
@@ -162,7 +172,10 @@
                 if (!bn.value.includes("Patron's account is Limited Use due to temporary residence at "
                     + item['gsx$name']['$t'] + ' (' + item['gsx$address']['$t'] + ')')) {
                   if (item['gsx$type']['$t'] === "restricted") {
-                    staffInit = prompt("--- NOTE ---\nA library card issued to " + item['gsx$address']['$t'] + " (" +item['gsx$name']['$t'] + ") must be LIMITED USE.\n\nIn order to have the limited use restrictions removed from their account, a patron must first provide proof that they are living at a valid residential address.\n\nFor more info refer to the list of unacceptable addresses on the staff wiki:\nhttp://www.mplnet.org/system/files/UNACCEPTABLE%20ADDRESSES.pdf\n\nIf this is a new address, enter your initials and library code to confirm: (e.g. LS/MAD)");
+                    let promptText = "--- NOTE ---\nA library card issued to " + item['gsx$address']['$t'] + " (" +item['gsx$name']['$t'] + ") must be LIMITED USE.\n\nIn order to have the limited use restrictions removed from their account, a patron must first provide proof that they are living at a valid residential address."
+                    promptText += item['gsx$city']['$t'] === 'madison' ? "\n\nFor more info refer to the list of unacceptable addresses on the staff wiki:\nhttps://www.mplnet.org/wiki/limited-use-addresses\n\nIf this is a new address, enter your initials and library code to confirm: (e.g. LS/MAD)"
+                                                                       : "\n\nIf this is a new address, enter your initials and library code to confirm: (e.g. LS/MAD)";
+                    staffInit = prompt(promptText);
                   } else if (item['gsx$type']['$t'] === "unique") {
                     staffInit = prompt(item['gsx$note']['$t'].replace(/\\n/g, "\n"));
                   }
