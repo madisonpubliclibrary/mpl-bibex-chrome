@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "MPL Bibliovation Extension",
   "short_name": "MPL BibEx",
-  "version": "3.8",
+  "version": "4.0",
   "author": "Lucas Schneider",
   "description": "MPL-BibEx provides additional tools for library staff of Wisconsin's South Central Library System using LibLime's Bibliovation ILS.",
   "homepage_url": "http://lrschneider.com/mpl-bibex-chrome",
@@ -49,10 +49,10 @@
     "storage",
     "tabs",
     "webNavigation",
-    "*://*.kohalibrary.com/*",
-    "*://*.census.gov/*",
-    "*://*.googleapis.com/*",
-    "https://spreadsheets.google.com/feeds/list/1ftLNpSrnF0n_YDfR9Sj3Pk-upxsLIxE6Ptzoo20cxG4/*"
+    "https://*.kohalibrary.com/*",
+    "https://*.census.gov/*",
+    "https://*.googleapis.com/*",
+    "https://*.mplnet.org/mpl-bibex/*"
   ],
 
   "web_accessible_resources": [

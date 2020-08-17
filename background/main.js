@@ -667,17 +667,23 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
       result = OPEN_CHANNEL;
       break;
     case "parsePatronAddr":
-      const madAddrURL = "https://spreadsheets.google.com/feeds/list/1ftLNpSrnF0n_YDfR9Sj3Pk-upxsLIxE6Ptzoo20cxG4/5/public/full?alt=json";
-
-      fetch(madAddrURL, {"method": "GET"}).then(response => {
-        if (!response.ok) {
-          throw new Error('[Google Sheets] HTTP error, status = ' + response.status);
+      fetch("https://www.mplnet.org/mpl-bibex/special-addresses").then(res => {
+        if (!res.ok) {
+          throw new Error('[MPLnet] HTTP error, status = ' + res.status);
         }
-        response.json().then(json => {
-          if (json && json.hasOwnProperty('feed') && json.feed.hasOwnProperty('entry')) {
-            return reply(json.feed.entry);
-          } else return false;
-        });
+        return res.text();
+      }).then(str => {
+        return (new window.DOMParser()).parseFromString(str, "text/xml");
+      }).then(data => {
+        let cleanedData = [];
+        for (let item of data.children[0].children) {
+          let i = {};
+          for (let tag of item.children) {
+            i[tag.tagName] = tag.textContent;
+          }
+          cleanedData.push(i);
+        }
+        return reply(cleanedData);
       });
       result = OPEN_CHANNEL;
       break;
