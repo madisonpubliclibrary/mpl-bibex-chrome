@@ -1563,7 +1563,6 @@
 
           if (selectList[0].value === "D-X-MAD") {
             const tempCensusTractMap = {}; // All known new 2020 Madison census tract numbers have been added to the madTracts array
-
             if (tempCensusTractMap.hasOwnProperty(result.censusTract)) {
               selectList[0].value = "D-" + tempCensusTractMap[result.censusTract];
               pstatMsg.send(MSG_SUCCESS, "City of Madison Census Tract " + result.censusTract + " was found, but " + tempCensusTractMap[result.censusTract] + " was selected in Bibliovation.", findAltPSTAT);
@@ -1575,7 +1574,7 @@
             pstatMsg.send(MSG_SUCCESS, "PSTAT Matched with: " + result.matchAddr, findAltPSTAT);
             toggleGMapSearch(true);
           }
-        } else if (result.key === "failedCensusData") {
+        } else {
           selectList[0].value = "X-UND";
           initialRejectMsg = result.rejectMsg;
 
@@ -1584,7 +1583,7 @@
             "address": targetAddr.value,
             "code": targetCity.value.toLowerCase().substring(0,3)
           }, function(result) {
-            if (result.key === "returnAlderDists") {
+            if (result.key === "returnCensusData") {
               if (result.value) {
                 selectList[0].value = result.value;
               }
@@ -1597,7 +1596,7 @@
                   "PSTAT Matched with: " + decodeURI(targetAddr.value).toUpperCase(),
                   findAltPSTAT);
               toggleGMapSearch(true);
-            } else if (result.key === "failedAlderDists") {
+            } else if (result.hasOwnProperty('error')) {
               if (/madison|middleton|verona|monona|fitchburg/i.test(targetCity.value)) {
                 initialRejectMsg = result.error;
                 chrome.runtime.sendMessage({
@@ -1605,7 +1604,7 @@
                   "address": targetAddr.value,
                   "code": "exception"
                 }, function(res) {
-                  if (res.key === "returnAlderDists") {
+                  if (res.key === "returnCensusData") {
                     if (res.value) {
                       selectList[0].value = res.value;
                     }
@@ -1618,7 +1617,7 @@
                         "PSTAT Matched with: " + decodeURI(targetAddr.value).toUpperCase(),
                         findAltPSTAT);
                     toggleGMapSearch(true);
-                  } else if (res.key === "failedExceptions") {
+                  } else if (res.hasOwnProperty('error')) {
                     initialRejectMsg = res.error;
                     pstatMsg.send(MSG_ERROR, "[PSTAT] " + initialRejectMsg, findAltPSTAT);
 

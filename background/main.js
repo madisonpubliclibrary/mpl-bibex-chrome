@@ -436,6 +436,41 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   }
 });
 
+/**
+ * Query database of PSTATs for MID, SUN, VER, and Madison-area exceptions
+ * @param {string} libCode Case-insensitive library code; must be one of:
+ *                         MID, VER, SUN, Exception
+ * @param {string} address The address for which to find a PSTAT
+ * @return {Promise} A Promise that will resolve the query results
+**/
+function queryAlderDists(libCode, address) {
+  return fetch("https://mplnet.org/bibex/xml/pstats/" + libCode).then(res => {
+    if (!res.ok) {
+      throw new Error('[MPLnet] HTTP error, status = ' + res.status);
+    }
+    return res.text();
+  }).then(str => {
+    return (new window.DOMParser()).parseFromString(str, "text/xml");
+  }).then(data => {
+    if (data && data.getElementsByTagName('address').length > 0) {
+      for (let item of data.getElementsByTagName('address')) {
+        let regex = new RegExp(item.getElementsByTagName('regex')[0].textContent, "i");
+        if (regex.test(address)) {
+          return {
+            "key": "returnCensusData",
+            "matchAddr": address,
+            "zip": item.getElementsByTagName('zip')[0].textContent,
+            "value": item.getElementsByTagName('value')[0].textContent
+          };
+        }
+      }
+      return {"error": "Address not found in database of PSTAT exceptions/aldermanic districts."};
+    } else {
+      return {"error": "Error retrieving XML data from MPLnet."};
+    }
+  });
+}
+
 chrome.runtime.onMessage.addListener(function(message, sender, reply) {
   const OPEN_CHANNEL = true;
   const CLOSE_CHANNEL = false;
@@ -504,45 +539,16 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
 
           if (matchAddr && county && countySub && censusTract && zip) {
             if (county === "Dane" && /^(Middleton|Sun Prairie|Verona) (city|village)$/.test(countySub)) {
-              const libCode = {'mid':'1','sun':'2','ver':'3'},
-                alderURL = "https://spreadsheets.google.com/feeds/list/1ftLNpSrnF0n_YDfR9Sj3Pk-upxsLIxE6Ptzoo20cxG4/" + libCode[countySub.substring(0,3).toLowerCase()] +
-                  "/public/full?alt=json";
-
-              return fetch(alderURL, {"method": "GET"}).then(response => {
-                return response.json();
-              }).then(json => {
-                if (json && json.hasOwnProperty('feed') && json.feed.hasOwnProperty('entry')) {
-                  json = json.feed.entry;
-                } else throw new Error("[Google Sheets] Invalid JSON response.");
-
-                let value = "";
-
-                for (let i = 0; i < json.length; i++) {
-                  let regex = new RegExp(json[i]['gsx$regex']['$t'], "i");
-                  if (regex.test(matchAddr)) {
-                    value = json[i]['gsx$value']['$t'];
-                  }
-                }
-
-                return Promise.resolve({
-                  "key": "returnCensusData",
-                  "matchAddr": matchAddr,
-                  "county": county,
-                  "countySub": countySub,
-                  "censusTract": censusTract,
-                  "zip": zip,
-                  "value": value
-                });
-              });
+              return queryAlderDists(countySub.substring(0,3), matchAddr);
             } else {
-              return Promise.resolve({
+              return {
                 "key": "returnCensusData",
                 "matchAddr": matchAddr,
                 "county": county,
                 "countySub": countySub,
                 "censusTract": censusTract,
                 "zip": zip
-              });
+              };
             }
           }
         }
@@ -557,55 +563,8 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
       result = OPEN_CHANNEL;
       break;
     case "queryAlderDists":
-      const libCode = {'mid':'1','sun':'2','ver':'3'},
-        alderURL = "https://spreadsheets.google.com/feeds/list/1ftLNpSrnF0n_YDfR9Sj3Pk-upxsLIxE6Ptzoo20cxG4/"
-            + (libCode[message.code.toLowerCase()] || '4') + "/public/full?alt=json"; // 4 = 'exception'
-
-      fetch(alderURL, {"method": "GET"}).then(response => {
-        if(!response.ok) {
-          throw new Error('[Google Sheets] HTTP error, status = ' + response.status);
-        }
-        return response.json();
-      }).then(json => {
-        if (json && json.hasOwnProperty('feed') && json.feed.hasOwnProperty('entry')) {
-          json = json.feed.entry;
-        } else return Promise.resolve({"error": "[Google Sheets] Invalid JSON response."});
-
-        let value, zip;
-        for (let i = 0; i < json.length; i++) {
-          let regex = new RegExp(json[i]['gsx$regex']['$t'], "i");
-
-          if (regex.test(message.address.replace(/\./g,''))) {
-            value = json[i]['gsx$value']['$t'];
-            zip = json[i]['gsx$zip']['$t'];
-            break;
-          }
-        }
-
-        if (value && zip) {
-          reply({
-            "key": "returnAlderDists",
-            "value": value,
-            "zip": zip
-          });
-        } else if (value) {
-          reply({
-            "key": "returnAlderDists",
-            "value": value
-          });
-        } else {
-          if (message.code === "exception") {
-            reply({
-              "key": "failedExceptions",
-              "error": "Address not found in database of PSTAT exceptions."
-            });
-          } else {
-            reply({
-              "key": "failedAlderDists",
-              "error": "Address not found in database of aldermanic districts."
-            });
-          }
-        }
+      queryAlderDists(message.code,message.address.replace(/\./g,'')).then(res=>{
+        reply(res);
       });
       result = OPEN_CHANNEL;
       break;
@@ -651,11 +610,11 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
           distArray.push([distanceOrder[i], distanceData[i].distance.value])
         }
 
-        return Promise.resolve(distArray.sort((a,b) => {
+        return distArray.sort((a,b) => {
           if (a[1] < b[1]) return -1;
           else if (a[1] > b[1]) return 1;
           else return 0;
-        })[0]);
+        })[0];
       }).then(arr => {
         reply(arr);
       }, reject => {
@@ -667,7 +626,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
       result = OPEN_CHANNEL;
       break;
     case "parsePatronAddr":
-      fetch("https://www.mplnet.org/mpl-bibex/special-addresses").then(res => {
+      fetch("https://mplnet.org/bibex/xml/special").then(res => {
         if (!res.ok) {
           throw new Error('[MPLnet] HTTP error, status = ' + res.status);
         }
