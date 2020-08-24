@@ -13,8 +13,8 @@ function setIcon() {
       "shortcutLink4": "https://www.midlibrary.org",
       "shortcutText5": "MID Staff Page",
       "shortcutLink5": "https://www.midlibrary.org/library/staff/login.asp",
-      "shortcutText6": "",
-      "shortcutLink6": ""
+      "shortcutText6": "iSolved HCM",
+      "shortcutLink6": "https://payrollcompany.myisolved.com/UserLogin.aspx"
     },
     "SUN": {
       "shortcutText4": "SUN Home Page",
@@ -436,138 +436,12 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   }
 });
 
-/**
- * Query database of PSTATs for MID, SUN, VER, and Madison-area exceptions
- * @param {string} libCode Case-insensitive library code; must be one of:
- *                         MID, VER, SUN, Exception
- * @param {string} address The address for which to find a PSTAT
- * @return {Promise} A Promise that will resolve the query results
-**/
-function queryAlderDists(libCode, address) {
-  return fetch("https://mplnet.org/bibex/xml/pstats/" + libCode).then(res => {
-    if (!res.ok) {
-      throw new Error('[MPLnet] HTTP error, status = ' + res.status);
-    }
-    return res.text();
-  }).then(str => {
-    return (new window.DOMParser()).parseFromString(str, "text/xml");
-  }).then(data => {
-    if (data && data.getElementsByTagName('address').length > 0) {
-      for (let item of data.getElementsByTagName('address')) {
-        let regex = new RegExp(item.getElementsByTagName('regex')[0].textContent, "i");
-        if (regex.test(address)) {
-          return {
-            "key": "returnCensusData",
-            "matchAddr": address,
-            "zip": item.getElementsByTagName('zip')[0].textContent,
-            "value": item.getElementsByTagName('value')[0].textContent
-          };
-        }
-      }
-      return {"error": "Address not found in database of PSTAT exceptions/aldermanic districts."};
-    } else {
-      return {"error": "Error retrieving XML data from MPLnet."};
-    }
-  });
-}
-
 chrome.runtime.onMessage.addListener(function(message, sender, reply) {
   const OPEN_CHANNEL = true;
   const CLOSE_CHANNEL = false;
   let result = CLOSE_CHANNEL;
 
   switch (message.key) {
-    case "queryGeocoder":
-      var matchAddr, county, countySub, censusTract, zip;
-
-      const baseURL = "https://geocoding.geo.census.gov/geocoder/geographies/address?street="
-        countyURL = baseURL + message.addressURI + "&city=" + message.city
-            + "&state=wi&benchmark=Public_AR_Current&vintage=Current_Current&layers=Counties&format=json",
-        countySubdivisionURL = baseURL + message.addressURI + "&city=" + message.city
-            + "&state=wi&benchmark=Public_AR_Current&vintage=Current_Current&layers=County+Subdivisions&format=json",
-        censusTractURL = baseURL + message.addressURI + "&city=" + message.city
-            + "&state=wi&benchmark=Public_AR_Current&vintage=Current_Current&layers=Census Tracts&format=json";
-
-      const getCounty = fetch(countyURL, {"method": "GET"}).then(response => {
-        if(!response.ok && response.status != '400') {
-          throw new Error('[census.gov] HTTP error, status = ' + response.status);
-        }
-        return response.json();
-      });
-
-      const getCountySub = fetch(countySubdivisionURL, {"method": "GET"}).then(response => {
-        if(!response.ok && response.status != '400') {
-          throw new Error('[census.gov] HTTP error, status = ' + response.status);
-        }
-        return response.json();
-      });
-
-      const getCensusTract = fetch(censusTractURL, {"method": "GET"}).then(response => {
-        if(!response.ok && response.status != '400') {
-          throw new Error('[census.gov] HTTP error, status = ' + response.status);
-        }
-        return response.json();
-      });
-
-      Promise.all([getCounty,getCountySub,getCensusTract]).then(vals => {
-        var countyData = vals[0], countySubData = vals[1],
-            censusTractData = vals[2];
-
-        if (countyData.errors) {
-          throw new Error(countyData.errors.join("; "));
-        } else if (!countyData || !countyData.result || countyData.result.addressMatches.length === 0) {
-          throw new Error("No county data matched given address.");
-        } else if (countySubData.errors) {
-          throw new Error(countySubData.errors.join("; "));
-        } else if (!countySubData || !countySubData.result || countySubData.result.addressMatches.length === 0) {
-          throw new Error("No county subdivision data matched given address.");
-        } else if (censusTractData.errors) {
-          throw new Error(censusTractData.errors.join("; "));
-        } else if (!censusTractData || !censusTractData.result || censusTractData.result.addressMatches.length === 0) {
-          throw new Error("No census tract data matched given address.");
-        } else {
-          countyData = countyData.result.addressMatches[0];
-          countySubData = countySubData.result.addressMatches[0];
-          censusTractData = censusTractData.result.addressMatches[0];
-
-          matchAddr = countyData.matchedAddress.split(',')[0].toUpperCase();
-          county = countyData.geographies.Counties[0].BASENAME;
-          countySub = countySubData.geographies['County Subdivisions'][0].NAME;
-          zip = countyData.addressComponents.zip;
-          censusTract = censusTractData.geographies['Census Tracts'];
-          if (censusTract) censusTract = censusTract[0].BASENAME;
-
-          if (matchAddr && county && countySub && censusTract && zip) {
-            if (county === "Dane" && /^(Middleton|Sun Prairie|Verona) (city|village)$/.test(countySub)) {
-              return queryAlderDists(countySub.substring(0,3), matchAddr);
-            } else {
-              return {
-                "key": "returnCensusData",
-                "matchAddr": matchAddr,
-                "county": county,
-                "countySub": countySub,
-                "censusTract": censusTract,
-                "zip": zip
-              };
-            }
-          }
-        }
-      }).then(res => {
-        reply(res);
-      }, reject => {
-        reply({
-          "key": "failedCensusData",
-          "rejectMsg": reject.message
-        });
-      });
-      result = OPEN_CHANNEL;
-      break;
-    case "queryAlderDists":
-      queryAlderDists(message.code,message.address.replace(/\./g,'')).then(res=>{
-        reply(res);
-      });
-      result = OPEN_CHANNEL;
-      break;
     case "alternatePSTAT":
       chrome.tabs.query({
         "currentWindow": true,
@@ -578,12 +452,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
             "key": "findAlternatePSTAT"
           });
         }
-      });
-      break;
-    case "openTIGERweb":
-      chrome.tabs.create({
-        "url": "https://tigerweb.geo.census.gov/tigerweb",
-        "active": true
       });
       break;
     case "findNearestLib":
