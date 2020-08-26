@@ -1410,39 +1410,32 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
     };
 
     queryGeocoder(message.addressURI, message.city).then(res => {
-      console.log("queryGeocoder res");
       payload.success = true;
       payload.matchAddr = res.matchAddr;
       payload.zip = res.zip;
       payload.pstat = pstats.find(res.county,res.countySub,res.censusTract);
     }, reject => {
-      console.log("queryGeocoder rej");
       payload.error = reject.message;
     }).then(res => {
-      console.log("queryAlder");
       if (/^mid|ver|sun$/i.test(message.city.substring(0,3))) {
         return queryAlderExceptions(message.city.substring(0,3), message.address);
       }
       // Pass along previous error message
       throw new Error(payload.error);
     }).then(res => {
-      console.log("queryAlder res");
       payload.success = true;
       if (!payload.matchAddr) payload.matchAddr = message.address;
       payload.zip = res.zip;
       payload.pstat = res.pstat;
     }, reject => {
-      console.log("queryAlder rej");
       payload.error = reject.message;
     }).then(res => {
-      console.log("queryExceptions");
       if (/madison|middleton|verona|monona|fitchburg/i.test(message.city)) {
         return queryAlderExceptions("exception", message.address);
       }
       // Pass along previous error message
       throw new Error(payload.error);
     }).then(res => {
-      console.log("queryExceptions res");
       payload.success = true;
       // Overwrite Census matched address in case of incorrect data, as with
       // 822 E Washington Ave (Census returns W Washington Ave)
@@ -1450,12 +1443,22 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
       payload.zip = res.zip;
       payload.pstat = res.pstat;
     }, reject => {
-      console.log("queryExceptions rej");
       payload.error = reject.message;
     }).then(res => {
       if (!payload.success && /^sun prairie/i.test(message.city.replace('%20',' '))) payload.pstat = "D-X-SUN";
       else if (!payload.success && /^madison/i.test(message.city)) payload.pstat = "D-X-MAD";
       reply(payload);
+    });
+  } else if (message.key = "getAlternatePSTAT") {
+    chrome.tabs.query({
+      "currentWindow": true,
+      "active": true
+    }, function(tabs) {
+      for (let tab of tabs) {
+        chrome.tabs.sendMessage(tab.id, {
+          "key": "getAlternatePSTAT"
+        });
+      }
     });
   }
   return true;

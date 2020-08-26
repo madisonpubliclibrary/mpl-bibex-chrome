@@ -20,7 +20,7 @@ lostcard.addEventListener('click', function() {
 });
 
 altPSTAT.addEventListener('click', function() {
-  chrome.runtime.sendMessage({"key": "alternatePSTAT"});
+  chrome.runtime.sendMessage({"key": "getAlternatePSTAT"});
 });
 
 problemItem.addEventListener('click', function() {

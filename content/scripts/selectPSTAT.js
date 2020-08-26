@@ -285,7 +285,7 @@
 
     // Listen for alternate address PSTAT request
     chrome.runtime.onMessage.addListener(message => {
-      if (message.key === "findAlternatePSTAT") {
+      if (message.key === "getAlternatePSTAT") {
         queryPSTAT(true);
       }
     })
