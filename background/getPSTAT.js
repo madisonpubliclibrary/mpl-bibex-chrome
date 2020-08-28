@@ -1449,7 +1449,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
       else if (!payload.success && /^madison/i.test(message.city)) payload.pstat = "D-X-MAD";
       reply(payload);
     });
-  } else if (message.key = "getAlternatePSTAT") {
+  } else if (message.key === "getAlternatePSTAT") {
     chrome.tabs.query({
       "currentWindow": true,
       "active": true
