@@ -1407,25 +1407,30 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
       "zip": undefined,
       "error": "Unknown error occured.",
       "success": false
-    };
+    },
+    countySubCode = ""; // In case, e.g., a Madison, WI address has the county subdivision "Middleton city"
 
     queryGeocoder(message.addressURI, message.city).then(res => {
       payload.success = true;
       payload.matchAddr = res.matchAddr;
       payload.zip = res.zip;
       payload.pstat = pstats.find(res.county,res.countySub,res.censusTract);
+      countySubCode = res.countySub.substring(0,3);
     }, reject => {
       payload.error = reject.message;
     }).then(res => {
-      if (/^mid|ver|sun$/i.test(message.city.substring(0,3))) {
+      if (/^mid|ver|sun$/i.test(countySubCode)) {
+        return queryAlderExceptions(countySubCode, message.address);
+      } else if (/^mid|ver|sun$/i.test(message.city.substring(0,3))) {
         return queryAlderExceptions(message.city.substring(0,3), message.address);
+      } else {
+        // Pass along previous error message
+        throw new Error(payload.error);
       }
-      // Pass along previous error message
-      throw new Error(payload.error);
     }).then(res => {
       payload.success = true;
       if (!payload.matchAddr) payload.matchAddr = message.address;
-      payload.zip = res.zip;
+      if (!payload.zip) payload.zip = res.zip;
       payload.pstat = res.pstat;
     }, reject => {
       payload.error = reject.message;
