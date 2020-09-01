@@ -57,11 +57,11 @@ function setIcon() {
       case "MID":
         chrome.browserAction.setIcon({
           "path": {
-            "16": "/content/img/mid-icon-16.png",
-            "32": "/content/img/mid-icon-32.png",
-            "48": "/content/img/mid-icon-48.png",
-            "64": "/content/img/mid-icon-64.png",
-            "128": "/content/img/mid-icon-128.png"
+            "16": "/content/img/mid-icon2-16.png",
+            "32": "/content/img/mid-icon2-32.png",
+            "48": "/content/img/mid-icon2-48.png",
+            "64": "/content/img/mid-icon2-64.png",
+            "128": "/content/img/mid-icon2-128.png"
           }
         });
 
