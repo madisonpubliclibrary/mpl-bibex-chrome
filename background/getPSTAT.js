@@ -320,7 +320,6 @@ const pstats = new function() {
       "Watertown city": "DG-WAT-C",
       "Waupun city": "DG-WAU-C",
       "Westford town": "DG-WES-T",
-      "Williamstown town": "DG-WIL-T",
       "__default__": "X-UND"
     },
     "Door": {
@@ -627,7 +626,6 @@ const pstats = new function() {
       "Bergen town": "MN-BRG-T",
       "Brighton town": "MN-BRI-T",
       "Bern town": "MN-BRN-T",
-      "Brokaw village": "MN-BRO-V",
       "Cassel town": "MN-CAS-T",
       "Cleveland town": "MN-CLE-T",
       "Colby city": "MN-COL-C",
@@ -654,7 +652,7 @@ const pstats = new function() {
       "Johnson town": "MN-JOH-T",
       "Kronenwetter village": "MN-KNN-V",
       "Knowlton town": "MN-KNW-T",
-      "Maine town": "MN-MAI-T",
+      "Maine village": "MN-MAI-V",
       "Marathon town": "MN-MAR-T",
       "Marathon City village": "MN-MAR-V",
       "Mcmillan town": "MN-MCM-T",

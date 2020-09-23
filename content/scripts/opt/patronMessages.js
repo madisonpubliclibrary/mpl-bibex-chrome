@@ -11,7 +11,8 @@
       const msgLabel = document.createElement('label');
       const msgSelect = document.createElement('select');
       const defaultOpt  = document.createElement('option');
-      const covidCard = document.createElement('option');
+      const onlineReg = document.createElement('option');
+      const lostCko = document.createElement('option');
       const cardAtNxtCko = document.createElement('option');
       const laptopAgreement = document.createElement('option');
       const rtdMailGroup = document.createElement('optgroup');
@@ -20,6 +21,9 @@
       const badEmailGroup = document.createElement('optgroup');
       const badEmail = document.createElement('option');
       const fullEmail = document.createElement('option');
+
+      const date = new Date();
+      const currDate = date.getMonth()+1 + '/' + date.getDate() + '/' + date.getFullYear();
 
       msgSelect.id = "bibexNotes";
       msgLabel.setAttribute('for', 'bibexNotes');
@@ -30,7 +34,7 @@
         bibNotes.value = "";
         bnMsg.value = this.options[this.selectedIndex].value;
         if (this.selectedOptions[0].value.includes("Patron has signed Laptop/iPad")) {
-          var staffInit = prompt("Enter your initials and library location (e.g. LS/MAD)");
+          let staffInit = prompt("Enter your initials and library location (e.g. LS/MAD)");
           if (staffInit) bnMsg.value += "(" + staffInit + ")";
         }
       });
@@ -41,8 +45,10 @@
 
       defaultOpt.value = "";
       defaultOpt.textContent = "Select BibEx Note";
-      covidCard.value = "Card mailed during COVID closures. Please check photo ID when the card is first presented at a service desk, then delete this note. ";
-      covidCard.textContent = "COVID Account Verification";
+      onlineReg.value = "This account has been created from an online application. The card will be mailed to the address provided. ";
+      onlineReg.textContent = "Online Registration";
+      lostCko.value = "CKO allowed with lost items on " + currDate + ". ";
+      lostCko.textContent = "Allowed CKO w/ Lost Items";
       cardAtNxtCko.value = "Patron must have library card at next checkout. ";
       cardAtNxtCko.textContent = "Have card at next checkout"
       laptopAgreement.value = "Patron has signed Laptop/iPad Loan Agreement form. Form on file. ";
@@ -62,31 +68,29 @@
       wrapper.appendChild(msgLabel);
       wrapper.appendChild(msgSelect);
       msgSelect.appendChild(defaultOpt);
-      msgSelect.appendChild(covidCard);
-      msgSelect.appendChild(cardAtNxtCko);
+      msgSelect.appendChild(onlineReg);
+      msgSelect.appendChild(lostCko);
       msgSelect.appendChild(laptopAgreement);
+      msgSelect.appendChild(cardAtNxtCko);
 
       // Canned notes requested by MID
       if (res.hasOwnProperty('skin') && res.skin === 'MID') {
-        const date = new Date();
-        const currDate = date.getMonth()+1 + '/' + date.getDate() + '/' + date.getFullYear();
-
         const midGroup = document.createElement('optgroup');
         const covidRenewal = document.createElement('option');
-        const onlineReg = document.createElement('option');
+        const onlineRegMID = document.createElement('option');
         const curbsideNoShow = document.createElement('option');
 
         midGroup.label = "MID";
         covidRenewal.textContent = "COVID Account Renewal";
         covidRenewal.value = "Account renewed during COVID closures. Check ID when full services resume. ";
-        onlineReg.textContent = "Verify Online Registration";
-        onlineReg.value = "Online registration, card mailed. Check ID when full services resume. ";
+        onlineRegMID.textContent = "Verify Online Registration";
+        onlineRegMID.value = "Online registration, card mailed. Check ID when full services resume. ";
         curbsideNoShow.textContent = "Curbside No-Show";
         curbsideNoShow.value = "Curbside pickup no-show on " + currDate + ". Archive note after pickup/holding period ends. ";
 
         msgSelect.appendChild(midGroup);
         midGroup.appendChild(covidRenewal);
-        midGroup.appendChild(onlineReg);
+        midGroup.appendChild(onlineRegMID);
         midGroup.appendChild(curbsideNoShow);
       }
 
