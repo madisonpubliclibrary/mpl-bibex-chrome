@@ -398,7 +398,7 @@ const pstats = new function() {
       "Jefferson town": "G-JEF-T",
       "Jordan town": "G-JOR-T",
       "Monroe city": "G-MRO-SD", // Don't use G-MONR-C per SCLS PSTAT spreadsheet
-      "Monroe town": "G-MONR-T",
+      "Monroe town": "G-MRO-SD", // Don't use G-MONR-T per SCLS PSTAT spreadsheet
       "Monticello village": "G-MONT-V",
       "Mount Pleasant town": "G-MP-T",
       "New Glarus town": "G-NG-T",
