@@ -26,9 +26,9 @@
         data.itemID = item.parentElement.href.match(/=\d+/)[0].substr(1);
         for (let td of item.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.children) {
 
-          if (td.classList.contains('ccode')) {
+          if (td.classList.contains('item-data-ccode')) {
             data.cCode = td.textContent.trim();
-          } else if (td.classList.contains('_availability')) {
+          } else if (td.classList.contains('item-data-_availability')) {
             if (/^Checked out/.test(td.textContent.trim().replace(/\s+/g, ' '))) {
               let checkedOut = td.textContent.trim().replace(/\s+/g, ' ').match(/^Checked out to \d+/);
               if (checkedOut.length === 1) {
