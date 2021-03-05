@@ -119,11 +119,19 @@ button {
   background: #1c6677;
 }
 
-#printForm:hover:before {
+#startOver {
+  cursor: pointer;
+  text-align: center;
+  background: #782c54;
+}
+
+#printForm:hover:before,
+#startOver:hover:before {
   content: "― ";
 }
 
-#printForm:hover:after {
+#printForm:hover:after,
+#startOver:hover:after {
   content: " ―";
 }
 

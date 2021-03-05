@@ -7,7 +7,7 @@
   const staffName = document.getElementById("staffInit");
   const type = document.getElementById("problem");
   const idBy = document.getElementById("idBy");
-  const receivedVia = document.getElementById("receivedBy");
+  const receivedBy = document.getElementById("receivedBy");
   const ckiBySorter = document.getElementById("ckiBySorter");
   const details = document.getElementById("details");
   const itemTitle = document.getElementById("itemTitle");
@@ -24,6 +24,7 @@
   const staffInit = document.getElementById("notifiedBy");
   const contactedVia = document.getElementById("contactedVia");
   const instructions = document.getElementById("instructions");
+  const startOver = document.getElementById("startOver");
   const nonDefectNonHold = document.getElementById("nonDefectNonHold");
   const nonDefectHold = document.getElementById("nonDefectHold");
   const defect = document.getElementById("defect");
@@ -169,7 +170,7 @@
 
     var emailParts = patronEmail
 
-    if (to.value == "" | date.value == "" | from.value == "" | staffName.value == "" | type.value == "" | idBy.value == "" |receivedVia.value == "" | details.value == "" | itemTitle.value == "" | itemBarcode.value == "") {
+    if (to.value == "" | date.value == "" | from.value == "" | staffName.value == "" | type.value == "" | idBy.value == "" |receivedBy.value == "" | details.value == "" | itemTitle.value == "" | itemBarcode.value == "") {
       alert("Please check that all required fields have been filled in.");
     } else {
       instructions.style.display = "";
@@ -179,7 +180,7 @@
           nonDefectHold.style.display = "none";
           defect.style.display = "";
       } else {
-        if (receivedVia.value === "Transit Hold") {
+        if (receivedBy.value === "Transit Hold") {
           nonDefectNonHold.style.display = "none";
           nonDefectHold.style.display = "";
           defect.style.display = "none";
@@ -201,7 +202,7 @@
           ["staffName", staffName.value.toUpperCase()],
           ["type", type.value],
           ["idBy", idBy.value],
-          ["receivedVia", receivedVia.value],
+          ["receivedBy", receivedBy.value],
           ["ckiBySorter", ckiBySorter.checked.toString()],
           ["details", details.value],
           ["itemTitle", itemTitle.value],
@@ -220,6 +221,41 @@
         ]
       });
     }
+  });
+
+  startOver.addEventListener('click', function() {
+    // Scroll to top of page
+    window.scrollTo(0,0);
+
+    // Clear all fields
+    to.value = "";
+    date.value = getCurrDate();
+    from.value = "";
+    staffName.value = "";
+    problem.value = "";
+    idBy.value = "";
+    receivedBy.value = "";
+    ckiBySorter.checked = false;
+    details.value = "";
+    itemTitle.value = "";
+    itemBarcode.value = "";
+    cCode.value = "";
+    holds.value = "";
+    copies.value = "";
+    use.value = "";
+    patron.value = "";
+    patronBarcode.value = "";
+    patronPhone.value = "";
+    patronEmail.value = "";
+    dateNotified.value = "";
+    notifiedBy.value = "";
+    contactedVia.value = "";
+
+    // Hide instructions
+    instructions.style.display = "none";
+    nonDefectNonHold.style.display = "none";
+    nonDefectHold.style.display = "none";
+    defect.style.display = "none";
   });
 
   // Handle cases when we're loading the problem form with barcode data
