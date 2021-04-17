@@ -18,7 +18,7 @@
     HTMLInputElement.prototype.correctTextCase = function () {
       if (/^(email|emailpro|B_email)$/.test(this.id)) {
         this.value = this.value.toLowerCase().replace(/\s{2,}/g, ' ').trim();
-      } else if (this.id !== 'userid') {
+      } else if (this.id !== 'userid' && this.id !== 'password') {
         this.value = this.value.toUpperCase().replace(/\s{2,}/g, ' ').trim();
       }
     }
