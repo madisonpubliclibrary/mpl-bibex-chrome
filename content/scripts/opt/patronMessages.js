@@ -76,11 +76,14 @@
       // Canned notes requested by MID
       if (res.hasOwnProperty('skin') && res.skin === 'MID') {
         const midGroup = document.createElement('optgroup');
+		const allowOverride = document.createElement('option');
         const covidRenewal = document.createElement('option');
         const onlineRegMID = document.createElement('option');
         const curbsideNoShow = document.createElement('option');
 
         midGroup.label = "MID";
+		allowOverride.textContent = "One-time Override";
+		allowOverride.value = "Allowed one-time override for ";
         covidRenewal.textContent = "COVID Account Renewal";
         covidRenewal.value = "Account renewed during COVID closures. Check ID when full services resume. ";
         onlineRegMID.textContent = "Verify Online Registration";
@@ -89,6 +92,7 @@
         curbsideNoShow.value = "Curbside pickup no-show on " + currDate + ". Archive note after pickup/holding period ends. ";
 
         msgSelect.appendChild(midGroup);
+		midGroup.appendChild(allowOverride);
         midGroup.appendChild(covidRenewal);
         midGroup.appendChild(onlineRegMID);
         midGroup.appendChild(curbsideNoShow);
