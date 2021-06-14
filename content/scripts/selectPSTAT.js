@@ -255,10 +255,12 @@
       });
 
       // Append Google Map elements
-      branchList.parentElement.appendChild(lnBrk);
-      branchList.parentElement.appendChild(gmapResponse);
-      branchList.parentElement.appendChild(nearestLib);
-      branchList.parentElement.appendChild(mapRegionList);
+      if (!document.getElementById('nearestLib')) {
+        branchList.parentElement.appendChild(lnBrk);
+        branchList.parentElement.appendChild(gmapResponse);
+        branchList.parentElement.appendChild(nearestLib);
+        branchList.parentElement.appendChild(mapRegionList);
+    }
     };
 
     const toggleGMapSearch = function(display) {

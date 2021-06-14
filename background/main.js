@@ -681,11 +681,10 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
                   });
 
                   Promise.all([getItemTitleCopiesHolds, getItemUse, getItemPastUse]).then(res => {
-                    console.log(res);
                     /**
-                     * Presently, there is no way to calculate an item's exact total use in Bibliovation if
-                     * it was acquired before 2012. If the acquisition date is before 2012, item use should
-                     * be calculated by adding Dynix and Koha Past Use and the YTD. If the acquisition date
+                     * There is no way to calculate an item's exact total use in Bibliovation if it was
+                     * acquired before 2012. If the acquisition date is before 2012, item use should be
+                     * calculated by adding Dynix and Koha Past Use and the YTD. If the acquisition date
                      * is after 2012, item use should use only the "total use" value.
                      *
                      * The most accurate use data will always be the larger of these two calculations, which

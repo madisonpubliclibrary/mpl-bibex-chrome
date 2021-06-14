@@ -190,6 +190,12 @@
                   deleteLUNotice();
                 }
                 return;
+              } else if (item['type'] === "WUO") { /*** Requested by STP ***/
+                if (cc) {
+                  cc.value = "WEB";
+                    alert("--- NOTE ---\nA library card CANNOT be issued to this address.\n" + item['address'] + " (" + item['name'] + ") is NOT a valid residential address.\n\nInform any patron providing this address that they must provide proof of a valid residential address in order to get a library card. They may otherwise sign up for a Web-use Only account.");
+                }
+                return;
               }
             }
           }

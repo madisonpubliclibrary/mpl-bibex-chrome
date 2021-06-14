@@ -14,7 +14,6 @@
         data.ytd = item.parentElement.parentElement.children[1].children[2].children[1].children[1].children[1].textContent.match(/YTD:\s+\d+/)[0].match(/\d+/)[0];
       }
     }
-    console.log(data);
     return data;
   }
 })();
