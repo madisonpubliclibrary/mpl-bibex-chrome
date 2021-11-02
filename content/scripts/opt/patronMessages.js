@@ -76,24 +76,21 @@
       // Canned notes requested by MID
       if (res.hasOwnProperty('skin') && res.skin === 'MID') {
         const midGroup = document.createElement('optgroup');
-		const allowOverride = document.createElement('option');
-        const covidRenewal = document.createElement('option');
+		    const allowOverride = document.createElement('option');
+        const remoteRenewal = document.createElement('option');
         const onlineRegMID = document.createElement('option');
-        const curbsideNoShow = document.createElement('option');
 
         midGroup.label = "MID";
-		allowOverride.textContent = "One-time Override";
-		allowOverride.value = "Allowed one-time override for ";
-        covidRenewal.textContent = "COVID Account Renewal";
-        covidRenewal.value = "Account renewed during COVID closures. Check ID when full services resume. ";
-        onlineRegMID.textContent = "Verify Online Registration";
-        onlineRegMID.value = "Online registration, card mailed. Check ID when full services resume. ";
-        curbsideNoShow.textContent = "Curbside No-Show";
-        curbsideNoShow.value = "Curbside pickup no-show on " + currDate + ". Archive note after pickup/holding period ends. ";
+		    allowOverride.textContent = "One-time Override";
+	      allowOverride.value = "Allowed one-time override for ";
+        remoteRenewal.textContent = "Remote Account Renewal";
+        remoteRenewal.value = "Account renewed remotely, please verify photo ID and address info. ";
+        onlineRegMID.textContent = "Online Registration";
+        onlineRegMID.value = "Online registration. Please check patron ID.";
 
         msgSelect.appendChild(midGroup);
-		midGroup.appendChild(allowOverride);
-        midGroup.appendChild(covidRenewal);
+		    midGroup.appendChild(allowOverride);
+        midGroup.appendChild(remoteRenewal);
         midGroup.appendChild(onlineRegMID);
         midGroup.appendChild(curbsideNoShow);
       }
