@@ -538,12 +538,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, reply) {
         "allFrames": true
       });
       break;
-    case "addPaymentPlanNote":
-      chrome.tabs.executeScript({
-        "file": "/browserAction/scripts/addPaymentPlanNote.js",
-        "allFrames": true
-      });
-      break;
     case "printBarcode":
       chrome.storage.sync.get('receiptFont', res => {
         let receiptFont = res.hasOwnProperty('receiptFont') ? res.receiptFont : "36px";

@@ -12,6 +12,7 @@
       const msgSelect = document.createElement('select');
       const defaultOpt  = document.createElement('option');
       const onlineReg = document.createElement('option');
+      const easyAccess = document.createElement('option');
       const lostCko = document.createElement('option');
       const cardAtNxtCko = document.createElement('option');
       const laptopAgreement = document.createElement('option');
@@ -47,6 +48,8 @@
       defaultOpt.textContent = "Select BibEx Note";
       onlineReg.value = "This account has been created from an online application. The card will be mailed to the address provided. ";
       onlineReg.textContent = "Online Registration";
+      easyAccess.value = "Easy Access Card - Patron must show proof of acceptable address to change patron category from LU to AD (full use card)."
+      easyAccess.textContent = "Easy Access Card"
       lostCko.value = "CKO allowed with lost items on " + currDate + ". ";
       lostCko.textContent = "Allowed CKO w/ Lost Items";
       cardAtNxtCko.value = "Patron must have library card at next checkout. ";
@@ -69,6 +72,7 @@
       wrapper.appendChild(msgSelect);
       msgSelect.appendChild(defaultOpt);
       msgSelect.appendChild(onlineReg);
+      msgSelect.appendChild(easyAccess);
       msgSelect.appendChild(lostCko);
       msgSelect.appendChild(laptopAgreement);
       msgSelect.appendChild(cardAtNxtCko);

@@ -1,4 +1,3 @@
-const paymentPlan = document.getElementById('paymentPlan');
 const lostcard = document.getElementById('lostCard');
 const altPSTAT = document.getElementById('PSTAT2');
 const problemItem = document.getElementById('problemItem');
@@ -10,10 +9,6 @@ const shortcut4 = document.getElementById('shortcut4');
 const shortcut5 = document.getElementById('shortcut5');
 const shortcut6 = document.getElementById('shortcut6');
 const prefs = document.getElementById('prefs');
-
-paymentPlan.addEventListener('click', function() {
-  chrome.runtime.sendMessage({"key": "addPaymentPlanNote"});
-});
 
 lostcard.addEventListener('click', function() {
   chrome.runtime.sendMessage({"key": "addLostCardNote"});

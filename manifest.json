@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "MPL Bibliovation Extension",
   "short_name": "MPL BibEx",
-  "version": "2021.11.2",
+  "version": "2021.11.29",
   "author": "Lucas Schneider",
   "description": "MPL-BibEx provides additional tools for library staff of Wisconsin's South Central Library System using LibLime's Bibliovation ILS.",
   "homepage_url": "http://lrschneider.com/mpl-bibex-chrome",
