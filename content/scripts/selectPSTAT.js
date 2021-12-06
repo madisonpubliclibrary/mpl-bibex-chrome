@@ -236,11 +236,15 @@
         "addressURI": cleanAddr(targetAddr, true),
         "city": getCity(targetCity, true)
       }, function(res) {
-        selectList[0].value = res.pstat;
         if (res.success) {
-          targetZip.value = res.zip;
-          pstatMsg.send(MSG_SUCCESS, "PSTAT matched with: " + res.matchAddr, findAltPSTAT);
-          toggleGMapSearch(true);
+          if (res.pstat === "MI-NOLIB" || res.pstat === "MI-LIB") {
+            pstatMsg.send(MSG_ERROR, "Ineligible Address Error: Accounts may not be created for Milwaukee County residents.", findAltPSTAT);
+          } else {
+            selectList[0].value = res.pstat;
+            targetZip.value = res.zip;
+            pstatMsg.send(MSG_SUCCESS, "PSTAT matched with: " + res.matchAddr, findAltPSTAT);
+            toggleGMapSearch(true);
+          }
         } else {
           if (res.zip) targetZip.value = res.zip;
           pstatMsg.send(MSG_ERROR, "Error: " + res.error, findAltPSTAT);
