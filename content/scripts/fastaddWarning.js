@@ -1,5 +1,7 @@
 (function() {
   'use strict';
+  // Warn staff that barcodes that are not a 14 digit number starting with a 3
+  // are likely not an actual barcode (e.g. corrupt/unwritten tag)
   if (/\/cgi-bin\/koha\/circ\/circulation\.pl/.test(window.location) &&
       !document.getElementById('nonStdBarcode')) {
     const confirmForm = document.getElementById('circ_confirmed_form');

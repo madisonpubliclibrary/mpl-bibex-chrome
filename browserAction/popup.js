@@ -2,6 +2,7 @@ const lostcard = document.getElementById('lostCard');
 const altPSTAT = document.getElementById('PSTAT2');
 const problemItem = document.getElementById('problemItem');
 const noticeFormatter = document.getElementById('noticeFormatter');
+const customPicklistSort = document.getElementById('customPicklistSort');
 const shortcut1 = document.getElementById('shortcut1');
 const shortcut2 = document.getElementById('shortcut2');
 const shortcut3 = document.getElementById('shortcut3');
@@ -32,12 +33,20 @@ noticeFormatter.addEventListener('click', function() {
   });
 });
 
+customPicklistSort.addEventListener('click', function() {
+  chrome.tabs.create({
+    "url": chrome.runtime.getURL("../customPicklistSort/picklistSort.html"),
+    "active": true
+  });
+});
+
 prefs.addEventListener('click', function() {
   chrome.runtime.openOptionsPage()
 });
 
 /** Generate shortcut options **/
-chrome.storage.sync.get(['shortcutText1','shortcutLink1','shortcutText2','shortcutLink2','shortcutText3','shortcutLink3','shortcutText4','shortcutLink4','shortcutText5','shortcutLink5','shortcutText6','shortcutLink6',], function(res) {
+chrome.storage.sync.get(['shortcutText1','shortcutLink1','shortcutText2','shortcutLink2','shortcutText3','shortcutLink3',
+                         'shortcutText4','shortcutLink4','shortcutText5','shortcutLink5','shortcutText6','shortcutLink6',]).then((res) => {
   shortcut1.textContent = res.shortcutText1;
   shortcut2.textContent = res.shortcutText2;
   shortcut3.textContent = res.shortcutText3;
@@ -92,9 +101,9 @@ chrome.storage.sync.get(['shortcutText1','shortcutLink1','shortcutText2','shortc
 
   if (res.shortcutLink6) {
     shortcut6.href = res.shortcutLink6;
-	if (shortcut6.textContent == "") {
-	  shortcut6.textContent = res.shortcutLink6;
-	}
+  	if (shortcut6.textContent == "") {
+  	  shortcut6.textContent = res.shortcutLink6;
+  	}
   } else {
     shortcut6.style.display = "none";
   }

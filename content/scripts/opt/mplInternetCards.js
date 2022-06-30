@@ -21,9 +21,9 @@
         yesDebarred.checked = true;
         noDebarred.checked = false;
 
-        chrome.storage.sync.get('triggerDebarred', function(res) {
+        chrome.storage.sync.get('triggerDebarred').then(res => {
           const debarAccount = res.hasOwnProperty('triggerDebarred') ? res.triggerDebarred : false;
-          chrome.storage.sync.set({'triggerDebarred': false}, function() {
+          chrome.storage.sync.set({'triggerDebarred': false}).then(() => {
             if (debarAccount) {
               const saveButton = document.getElementById('entryform_submit');
               if (saveButton) saveButton.click();
@@ -45,7 +45,7 @@
 
   /** If we're on the checkout screen, check whether we need to make the account debarred **/
   if (/\/cgi-bin\/koha\/members\/moremember\.pl\?borrowernumber=/.test(window.location)) {
-    chrome.storage.sync.get('triggerDebarred', function(res) {
+    chrome.storage.sync.get('triggerDebarred').then(res => {
       if (res.hasOwnProperty('triggerDebarred') && res.triggerDebarred) {
         const editButton = document.querySelector('#editpatron a:first-of-type');
         if (editButton) editButton.click();

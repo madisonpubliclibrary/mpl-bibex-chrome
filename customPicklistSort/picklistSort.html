@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>MPL Custom Picklist Sorter</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="picklistSort.css">
+		<script src="codeObjects.js"></script>
+		<script src="../lib/papaparse.js"></script>
+  </head>
+  <body>
+    <div id="print">
+      <h1>Holds Queue (<span id="queueLength"></span> items)</h1>
+      <table id="picklist">
+        <tr><th>Title</th><th>Loc.</th><th>Collection</th><th>Call No.</th><th>Barcode</th></tr>
+      </table>
+    </div>
+    <div id="screen">
+      <header>
+        <h1>MPL Custom Picklist Sorter</h1>
+      </header>
+      <section>
+        <ol>
+          <li>Ensure you <span style="font-weight:bold;font-style:italic;">are NOT</span> in "Bibliovation Receipts"
+          <li>Open the Holds Queue page in Bibliovation.</li>
+          <li>Without filtering or sorting any columns, export <span style="font-weight:bold;font-style:italic;">all</span> data as csv.</li>
+          <li>Process the .csv by selecting it below, and print the resulting page.</li>
+        </ol>
+        <p id="noConfig">Sort order not configured. Please edit the extension settings.</p>
+        <input id="picklistCSV" type="file" accept=".csv">
+      </section>
+      <!--<section>
+        <h2>Picture Book Order</h2>
+        <div id="pbjfiList">
+        </div>
+      </section>
+      <section>
+        <h2>Collection Code Order</h2>
+        <table>
+          <tr><th>Location</th><th>Collection</th><th>Interfiled with Code Below?</th><th>
+        </table>
+      </section>-->
+    </div>
+    <script src="picklistSort.js"></script>
+  </body>
+</html>

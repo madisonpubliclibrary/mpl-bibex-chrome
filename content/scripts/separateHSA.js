@@ -25,7 +25,7 @@
     }
 
     function filterHolds() {
-      chrome.storage.sync.get(Object.keys(avCodes), res => {
+      chrome.storage.sync.get(Object.keys(avCodes)).then(res => {
         for (let key in res) {
           if (!res.hasOwnProperty(key)) continue;
 

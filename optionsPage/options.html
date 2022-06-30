@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="options.css" />
+		<script src="../lib/papaparse.js"></script>
     <title>MPL BibEx Options</title>
   </head>
 
@@ -113,6 +114,42 @@
             <td><label for="sundayDropbox">Automatically checks "Dropbox Mode" on Sundays. If enabled, unchecking the box for dropbox mode on Sundays will disable it for 3 minutes (unless manually enabled).</label></td>
           </tr>
         </table>
+      </div>
+      <div class="option" id="customPicklist">
+        <h1>Custom Picklist Sorter</h1>
+        <p>Use default settings for
+          <select id="customPicklistDefaults">
+            <option value=""></option>
+            <option value="HAW">HAW</option>
+            <option value="HPB">HPB</option>
+            <option value="LAK">LAK</option>
+            <option value="MAD">MAD</option>
+            <option value="MEA">MEA</option>
+            <option value="MSB">MSB</option>
+            <option value="PIN">PIN</option>
+            <option value="SEQ">SEQ</option>
+            <option value="SMB">SMB</option>
+          </select><br>
+          <button id="applyPicklistDefaults" type="button">Apply</button>
+        </p>
+        <fieldset>
+          <legend>Location & Collection Code Order</legend>
+          <div id="locColStatus" class="picklistSettingStatus">
+            <div class="notSet">Location and collection code order not set.</div>
+            <div class="set">Configuration "<span id="locColConfigFile"></span>" saved on <span id="locColConfigDate"></span>. <button id="downloadLocColConfig" type="button">Download</button></div>
+          </div>
+          <input id="locColSortUpload" type="file" accept=".csv"><br>
+          <button id="updateLocColSort" type="button">Update</button><span id="updateLocColSortStatus"></span>
+        </fieldset>
+        <fieldset>
+          <legend>PBJFI Order</legend>
+          <div id="pbjfiStatus" class="picklistSettingStatus">
+            <div class="notSet">Picture book order not set.</div>
+            <div class="set">Configuration "<span id="pbjfiConfigFile"></span>" saved on <span id="pbjfiConfigDate"></span>. <button id="downloadPBJFIConfig" type="Button">Download</button></div>
+          </div>
+          <input id="pbjfiSortUpload" type="file" accept=".csv"><br>
+          <button id="updatePBJFISort" type="button">Update</button><span id="updatePBJFISortStatus"></span>
+        </fieldset>
       </div>
       <div class="option">
         <h1>Problem Form &#8211; Item Use</h1>

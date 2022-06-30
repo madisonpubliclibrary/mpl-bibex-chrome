@@ -80,7 +80,7 @@
     }
 
     function deleteLUNotice() {
-      chrome.storage.sync.get('addrNoteCooldown', res => {
+      chrome.storage.sync.get('addrNoteCooldown').then(res => {
         if ((res.hasOwnProperty('addrNoteCooldown') && !res.addrNoteCooldown) || !res.hasOwnProperty('addrNoteCooldown')) {
           chrome.runtime.sendMessage({"key": "addrNoteCooldown"}, () => {
             alert('Please delete the circulation note regarding the patron\'s previous limited use address');
@@ -90,7 +90,7 @@
     }
 
     function deleteDormNotice() {
-      chrome.storage.sync.get('addrNoteCooldown', res => {
+      chrome.storage.sync.get('addrNoteCooldown').then(res => {
         if ((res.hasOwnProperty('addrNoteCooldown') && !res.addrNoteCooldown) || !res.hasOwnProperty('addrNoteCooldown')) {
           chrome.runtime.sendMessage({"key": "addrNoteCooldown"}, () => {
             alert('Please delete the circulation note regarding the patron\'s previous dorm address');
@@ -101,9 +101,19 @@
 
     let parseAddr = function() {
       if (addr.value && city.value) {
-        chrome.runtime.sendMessage({
-          "key": "parsePatronAddr"
-        }, function(result) {
+        chrome.runtime.sendMessage({"key": "getPatronAddrXML"}).then(str => {
+          return (new window.DOMParser()).parseFromString(str, "text/xml");
+        }).then(data => {
+          let cleanedData = [];
+          for (let item of data.children[0].children) {
+            let i = {};
+            for (let tag of item.children) {
+              i[tag.tagName] = tag.textContent;
+            }
+            cleanedData.push(i);
+          }
+          return cleanedData;
+        }).then(result => {
           for (let item of result) {
             let fullAddr = (addr.value + ' ' + addr2.value).trim().replace(/[^\w\s]|_/g, "");
             let regex = new RegExp(item['address_regex'], 'i');

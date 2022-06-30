@@ -92,6 +92,7 @@ fieldset {
   margin-top: 1em;
   padding: 15px;
 }
+
 legend {
   border: 2px solid #444;
   background: #444;
@@ -100,4 +101,33 @@ legend {
   font-weight: bold;
   border-radius: 5px;
   padding: 3px;
+}
+
+/* Custom Picklist Sort */
+#customPicklist button {
+  cursor: pointer;
+}
+
+.picklistSettingStatus {
+  font-weight: bold;
+  margin-bottom: 1em;
+}
+
+.notSet,
+.error {
+  color: #d25d28;
+}
+
+.set {
+  display: none;
+  color: #70a43f;
+}
+
+.success {
+  color: #70a43f;
+}
+
+#updateLocColSortStatus,
+#updatePBJFISortStatus {
+  margin-left: 1em;
 }

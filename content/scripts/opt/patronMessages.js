@@ -3,7 +3,7 @@
   if (/\/cgi-bin\/koha\/circ\/circulation\.pl/.test(window.location) &&
       !document.getElementById('bibexNotes')) {
 
-    chrome.storage.sync.get('skin', function(res) {
+    chrome.storage.sync.get('skin').then(res => {
       const bn = document.getElementById('borrower_notes');
       const bnMsg = document.getElementById('borrower_note');
       const bibNotes = document.getElementById('type');

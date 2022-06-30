@@ -84,9 +84,9 @@
       chrome.runtime.sendMessage({
         "key": "getPatronData",
         "patronBarcode": patronBarcode.value
-      }, resArr => {
+      }).then(resArr => {
         if (resArr.length > 0) {
-          let res = resArr[0];
+          let res = resArr[0].result;
 
           patron.value = res.patronName;
           patronBarcode.value = res.patronBarcode;
@@ -135,7 +135,7 @@
       chrome.runtime.sendMessage({
         "key": "getItemData",
         "itemBarcode": itemBarcode.value
-      }, res => {
+      }).then(res => {
         itemTitle.value = res.title;
         cCode.value = res.cCode;
         holds.value = res.holds;
@@ -146,14 +146,14 @@
           chrome.runtime.sendMessage({
             "key": "getPatronData",
             "patronID": res.patronID
-          }, resArr => {
+          }).then(resArr => {
             if (resArr.length > 0) {
-              let patronData = resArr[0];
-
-              patron.value = patronData.patronName;
-              patronBarcode.value = patronData.patronBarcode;
-              patronPhone.value = patronData.patronPhone;
-              patronEmail.value = patronData.patronEmail;
+              let res = resArr[0].result;
+    
+              patron.value = res.patronName;
+              patronBarcode.value = res.patronBarcode;
+              patronPhone.value = res.patronPhone;
+              patronEmail.value = res.patronEmail;
             }
           });
         }
@@ -167,9 +167,6 @@
   });
 
   printForm.addEventListener("click", function() {
-
-    var emailParts = patronEmail
-
     if (to.value == "" | date.value == "" | from.value == "" | staffName.value == "" | type.value == "" | idBy.value == "" |receivedBy.value == "" | details.value == "" | itemTitle.value == "" | itemBarcode.value == "") {
       alert("Please check that all required fields have been filled in.");
     } else {
@@ -232,7 +229,7 @@
     date.value = getCurrDate();
     from.value = "";
     staffName.value = "";
-    problem.value = "";
+    type.value = "";
     idBy.value = "";
     receivedBy.value = "";
     ckiBySorter.checked = false;
@@ -247,8 +244,8 @@
     patronBarcode.value = "";
     patronPhone.value = "";
     patronEmail.value = "";
-    dateNotified.value = "";
-    notifiedBy.value = "";
+    notified.value = "";
+    staffInit.value = "";
     contactedVia.value = "";
 
     // Hide instructions
@@ -260,7 +257,8 @@
 
   // Handle cases when we're loading the problem form with barcode data
   if (location.search.length > 0) {
-    const data = location.search.substr(1).split("=");
+    const data = location.search.substring(1).split("=");
+    console.log(data);
 
     if (data && data.length === 2) {
       if (data[0] === "item") {
@@ -269,6 +267,16 @@
       } else if (data[0] === "patron") {
         patronBarcode.value = data[1];
         getPatronData.click();
+      } else if (data[0] === "itemBib") {
+        chrome.runtime.sendMessage({
+          "key": "getItemData",
+          "itemBib": data[1]
+        });
+      } else if (data[0] === "patronID") {
+        chrome.runtime.sendMessage({
+          "key": "patronID",
+          "patronID": data[1]
+        });
       }
     }
   }
