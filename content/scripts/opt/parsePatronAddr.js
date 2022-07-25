@@ -200,6 +200,8 @@
                   deleteLUNotice();
                 }
                 return;
+              } else if (item['type'] === "SaH") {
+                alert(item['note'].replace(/\\n/g, "\n"));
               } else if (item['type'] === "WUO") { /*** Requested by STP ***/
                 if (cc) {
                   cc.value = "WEB";
