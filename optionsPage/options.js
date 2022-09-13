@@ -30,6 +30,8 @@ const shortcutText5 = document.getElementById("shortcutText5");
 const shortcutLink5 = document.getElementById("shortcutLink5");
 const shortcutText6 = document.getElementById("shortcutText6");
 const shortcutLink6 = document.getElementById("shortcutLink6");
+const shortcutText7 = document.getElementById("shortcutText7");
+const shortcutLink7 = document.getElementById("shortcutLink7");
 const avCodes = ["avAndOther", "cassette", "cd", "dap", "dvd", "equipment", "software", "video"];
 
 function restoreOptions() {
@@ -64,6 +66,8 @@ function restoreOptions() {
     shortcutLink5.value = res.shortcutLink5;
     shortcutText6.value = res.shortcutText6;
     shortcutLink6.value = res.shortcutLink6;
+    shortcutText7.value = res.shortcutText7;
+    shortcutLink7.value = res.shortcutLink7;
   });
 }
 
@@ -107,17 +111,19 @@ document.getElementById("setDefault").addEventListener('click', function() {
     "sundayDropbox": true,
     "sundayDropboxPaused": false,
     "shortcutText1": "Bibliovation—Checkin",
-    "shortcutLink1": "https://scls.kohalibrary.com/app/staff/circ/checkin",
+    "shortcutLink1": "https://scls.bibliovation.com/app/staff/circ/checkin",
     "shortcutText2": "Bibliovation—Checkout",
-    "shortcutLink2": "https://scls.kohalibrary.com/app/staff/circ/checkout",
+    "shortcutLink2": "https://scls.bibliovation.com/app/staff/circ/checkout",
     "shortcutText3": "TIGERweb",
     "shortcutLink3": "https://tigerweb.geo.census.gov/tigerweb/",
     "shortcutText4": "MPL Home Page",
     "shortcutLink4": "http://madisonpubliclibrary.org",
     "shortcutText5": "MPLnet",
-    "shortcutLink5": "http://www.mplnet.org",
+    "shortcutLink5": "https://www.mplnet.org",
     "shortcutText6": "MPL Reference Tools",
-    "shortcutLink6": "http://www.madisonpubliclibrary.org/research/referenc2"
+    "shortcutLink6": "https://www.madisonpubliclibrary.org/research/referenc2",
+    "shortcutText7": "SCLS Status Wiki",
+    "shortcutLink7": "https://sclsstatus.pbworks.com"
   }).then(() => {
     chrome.runtime.sendMessage({"key": "updateExtensionIcon"});
     restoreOptions();
@@ -279,6 +285,12 @@ document.getElementById("shortcutText6").addEventListener('blur', function() {
 });
 document.getElementById("shortcutLink6").addEventListener('blur', function() {
   chrome.storage.sync.set({"shortcutLink6": shortcutLink6.value});
+});
+document.getElementById("shortcutText7").addEventListener('blur', function() {
+  chrome.storage.sync.set({"shortcutText7": shortcutText7.value});
+});
+document.getElementById("shortcutLink7").addEventListener('blur', function() {
+  chrome.storage.sync.set({"shortcutLink7": shortcutLink7.value});
 });
 /** Update Picklist Sort if Config Saved **/
 function updatePicklistSortConfigText() {
