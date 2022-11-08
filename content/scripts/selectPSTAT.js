@@ -244,7 +244,7 @@
             "Edgerton city": "D-EDG-C",
             "Fitchburg city": "D-FIT-T",
             //"Madison city": "", // Handled separately
-            "Madison town": "D-MAD-T",
+            "Madison town": "D-MAD-T", // Dissolved on 11/1/2022
             "Marshall village": "D-MARS-V",
             "Mazomanie town": "D-MAZ-T",
             "Mazomanie village": "D-MAZ-V",
@@ -1776,10 +1776,10 @@
           });
         } else {processPstatData(pstatData);}
 
-        function processPstatData(data) {
+        function processPstatData(pstatData) {
           if (!pstatData.matchAddr) pstatData.matchAddr = targetAddr.value;
 
-          if (pstatData.pstat && pstatData.pstat !== "X-UND") {
+          if (pstatData.pstat && pstatData.pstat !== "X-UND" && pstatData.pstat !== "D-MAD-T") {
             if (pstatData.pstat === "MI-NOLIB" || pstatData.pstat === "MI-LIB") {
               pstatMsg.send(pstatMsg.error, "Ineligible Address Error: Accounts may not be created for Milwaukee County residents.", findAltPSTAT);
             } else {
@@ -1791,9 +1791,16 @@
           } else {
             if (pstatData.zip) targetZip.value = pstatData.zip;
 
-            if (countySubCode === "mad") selectList[0].value = "D-X-MAD";
-            else if (countySubCode === "sun") selectList[0].value = "D-X-SUN";
-            else selectList[0].value = pstatData.pstat;
+            if (pstatData.pstat === "D-MAD-T") {
+              selectList[0].value = "D-X-MAD";
+              pstatData.errorMsg = "The Town of Madison was dissolved on Nov. 1, 2022. Please contact Madison Central Library circulation staff with the address that triggered this error.";      
+            } else if (countySubCode === "mad") {
+              selectList[0].value = "D-X-MAD";
+            } else if (countySubCode === "sun") {
+              selectList[0].value = "D-X-SUN";
+            } else {
+              selectList[0].value = "X-UND";
+            }
 
             pstatMsg.send(pstatMsg.error, "Error: " + pstatData.errorMsg, findAltPSTAT);
             openTIGERwebWrapper.style.display = 'block';
