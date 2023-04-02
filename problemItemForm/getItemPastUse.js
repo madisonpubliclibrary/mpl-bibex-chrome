@@ -13,6 +13,7 @@
                 resolve(col.textContent.trim() || "0");
               }
             }
+            resolve("0");
           }
         }
       }

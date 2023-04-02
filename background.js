@@ -633,7 +633,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         data.bibNum = bibNum;
       }).then(() => {
         return chrome.tabs.create({
-          "url": "https://scls.kohalibrary.com/app/staff/bib/" +
+          "url": "https://scls.bibliovation.com/app/staff/bib/" +
               data.bibNum + "/details?mbxItemBC=" + message.itemBarcode,
           "active": true
         });
@@ -657,7 +657,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         }
       }).then(() => {
         return chrome.tabs.create({
-          "url": "https://scls.kohalibrary.com/app/staff/bib/" +
+          "url": "https://scls.bibliovation.com/app/staff/bib/" +
               data.bibNum + "/items/circstatus?mbxItemBC=" + message.itemBarcode,
           "active": true
         });
@@ -678,7 +678,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         }
       }).then(() => {
         return chrome.tabs.create({
-          "url": "https://scls.kohalibrary.com/app/staff/bib/" +
+          "url": "https://scls.bibliovation.com/app/staff/bib/" +
               data.bibNum + "/items?mbxItemBC=" + message.itemBarcode,
           "active": true
         });
