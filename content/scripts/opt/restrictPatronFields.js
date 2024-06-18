@@ -10,27 +10,48 @@
     const enableOptsWrapper = document.createElement('div');
     const patronType = document.getElementById('categorycode');
     const unusedFields = [
-      'address2',
-      'select_city',
-      'country',
-      'mobile',
-      'fax',
-      'B_address2',
-      'B_country',
-      'altcontactaddress2',
-      'altcontactcountry',
-      'sort2',
-      'patron_attr_1',
-      'patron_attr_2',
-      'patron_attr_3',
-      'patron_attr_4',
-      'patron_attr_5',
-      'patron_attr_6',
-      'patron_attr_7',
-      'patron_attr_8',
-      'patron_attr_9',
-      'patron_attr_10',
-      'patron_attr_11'
+      'address2', // Address 2
+      'select_city', // City dropdown menu
+      'country', // Country
+      'mobile', // Phone (cell)
+      'fax', // Fax
+      'B_address2', // Alternate Address 2
+      'B_country', // Alternate Country
+      'altcontactaddress2', // Alternate Contact Address 2
+      'altcontactcountry', // Alternate Contact Country
+      'sort2', // Sort 2
+      // Messaging Preferences
+      'override_19', //General letter
+      'override_17', // General message (sent to me)
+      'override_18', // General message (notification)
+      'override_102', // New results from scheduled search
+      'override_6', // Hold Canceled
+      'override_114', // Hold Expired
+      'override_7', // Item Check-in
+      'override_8', // Item Checkout
+      'override_155', // Item Lost
+      'override_2', // Item Overdue
+      'override_15', // Item Recall Notice
+      'override_16', // Outstanding Fines
+      'override_120', // Checkout Receipt
+      'override_121', // Checkout Receipt Brief
+      'override_9', // Proxy Added
+      'override_10', // Proxy Changed
+      'override_11', // Proxy Deleted
+      'override_61', // ILL request approved
+      'override_63', // ILL request available
+      'override_62', // ILL request ordered
+      'override_60', // ILL request rejected
+      'override_59', // ILL request submitted
+      'override_29', // Purchase request approved
+      'override_32', // Purchase request available
+      'override_30', // Purchase request ordered
+      'override_31', // Purchase request received
+      'override_28', // Purchase request rejected
+      'override_27', // Purchase request submitted
+      'override_105', // Job failed
+      'override_104', // Job finished
+      'override_106' // Job timed out
     ];
     const unusedForWebUse = [
       'phone',
@@ -49,6 +70,33 @@
       'altcontactzipcode',
       'altcontactphone'
     ];
+
+    const advNoticeUnused = [
+      'popup_user_3',
+      'list_user_3',
+      'rss_user_3'
+    ];
+
+    const holdFilledUnused = [
+      'popup_user_5',
+      'list_user_5',
+      'rss_user_5'
+    ];
+
+    function disableUnusedTypes(overrideInput, elementList) {
+      overrideInput.addEventListener('click', e=> {
+        for (let id of elementList) {
+          let elt = document.getElementById(id);
+          if (elt && !enableOpts.checked) elt.disabled = true;
+        }
+      });
+    }
+
+    let advNoticeOverride = document.getElementById('override_3');
+    let holFilledOverride =  document.getElementById('override_5');
+    disableUnusedTypes(advNoticeOverride, advNoticeUnused);
+    disableUnusedTypes(holFilledOverride, holdFilledUnused);
+
 
     function toggleUnusedFields(fieldIdArr, enable) {
       if (enable) {

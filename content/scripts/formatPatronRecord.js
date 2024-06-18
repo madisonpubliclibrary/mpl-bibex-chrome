@@ -12,7 +12,7 @@
     const userId = document.getElementById('userid');
 
     /**
-     * Makes all text input fields upper case except email fileds which are made
+     * Makes all text input fields upper case except email fields which are made
      * lower case
      */
     HTMLInputElement.prototype.correctTextCase = function () {
@@ -35,7 +35,7 @@
         this.value = "MADISON WI";
       }
 
-      // Remove commas, abbrviate Wisconsin, trim whitespace
+      // Remove commas, abbreviate Wisconsin, trim whitespace
       this.value = this.value.replace(/,/, '').replace(/wisconsin$/i,'WI')
           .replace(/\s{2,}/g, ' ').trim();
 
