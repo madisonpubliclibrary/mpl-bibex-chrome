@@ -659,7 +659,7 @@
             "Maine village": "MN-MAI-V",
             "Marathon town": "MN-MAR-T",
             "Marathon City village": "MN-MAR-V",
-            "Mcmillan town": "MN-MCM-T",
+            "McMillan town": "MN-MCM-T",
             "Marshfield city": "MN-MFD-C",
             "Mosinee city": "MN-MOS-C",
             "Mosinee town": "MN-MOS-T",
